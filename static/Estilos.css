@@ -10,51 +10,55 @@
     --font-body: 'Poppins', sans-serif;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Corrección global para evitar desbordamientos horizontales */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    max-width: 100%; 
+}
 
 body {
     font-family: var(--font-body);
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     color: var(--text);
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* --- Header --- */
-header{
+header {
     background: rgba(15,12,41,.95);
     backdrop-filter: blur(18px);
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:0 40px;
-    height:110px;
-
-    position:sticky;
-    top:0;
-    z-index:1000;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 110px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
 }
 
-.logo-img{
-    height:82px;
-    width:auto;
-    display:block;
-    transition:.35s;
-    object-fit:contain;
+.logo-img {
+    height: 82px;
+    width: auto;
+    display: block;
+    transition: .35s;
+    object-fit: contain;
 }
 
-.logo-img:hover{
-    transform:scale(1.05);
+.logo-img:hover {
+    transform: scale(1.05);
 }
-.logo-img:hover { transform: scale(1.05); }
 
-nav ul { display: flex; list-style: none; gap: 30px; }
+nav ul { display: flex; list-style: none; gap: 30px; align-items: center; }
 nav a { color: white; text-decoration: none; font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
 /* --- Tarjeta --- */
-.container { padding: 40px 5%; display: flex; flex-direction: column; align-items: center; }
+.container { padding: 40px 5%; display: flex; flex-direction: column; align-items: center; width: 100%; }
 
 .registro-card, .history-card {
     background: var(--glass);
@@ -76,16 +80,6 @@ h2 { font-family: var(--font-heading); color: var(--primary); margin-bottom: 20p
 .input-group { margin-bottom: 20px; text-align: left; }
 label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary); font-weight: 600; }
 
-input {
-    width: 100%;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    border-radius: 10px;
-    color: white;
-    font-family: var(--font-body);
-}
-/* Aplicamos los mismos estilos al input y al select */
 input, select {
     width: 100%;
     padding: 12px;
@@ -94,31 +88,26 @@ input, select {
     border-radius: 10px;
     color: white;
     font-family: var(--font-body);
-    box-sizing: border-box; /* Evita que el padding rompa el ancho del 100% */
+    box-sizing: border-box;
 }
 
-/* Estilos específicos para el Select */
 select {
-    /* Quitamos la flecha nativa del navegador */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    
-    /* Añadimos una flecha personalizada blanca (SVG) */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 1rem center; /* Posición de la flecha a la derecha */
+    background-position: right 1rem center;
     background-size: 12px;
-    padding-right: 35px; /* Espacio para que el texto no choque con la flecha */
+    padding-right: 35px;
     cursor: pointer;
 }
 
-/* Cambiamos el color de las opciones cuando se despliega el menú 
-   (esto ayuda en navegadores basados en Chrome/Edge/Safari) */
 select option {
-    background: #1a1a2e; /* Usa un color oscuro sólido similar al fondo de tu card */
+    background: #1a1a2e;
     color: white;
 }
+
 /* --- Botón Neón --- */
 .btn-glow {
     width: 100%;
@@ -150,7 +139,8 @@ select option {
     cursor: pointer;
     width: 100%;
 }
-/* --- Botones de Control de Lista (Ver más / Volver) --- */
+
+/* --- Botones de Control de Lista --- */
 #controles-historial {
     display: flex;
     justify-content: center;
@@ -159,7 +149,7 @@ select option {
 }
 
 .btn-toggle {
-    background: rgba(0, 210, 255, 0.1); /* Fondo sutil */
+    background: rgba(0, 210, 255, 0.1);
     border: 1px solid var(--primary);
     color: var(--primary);
     padding: 8px 20px;
@@ -175,7 +165,65 @@ select option {
 
 .btn-toggle:hover {
     background: var(--primary);
-    color: #0f0c29; /* Texto oscuro al hacer hover */
+    color: #0f0c29;
     box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
     transform: translateY(-2px);
+}
+
+/* ==========================================================
+   ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
+   ========================================================== */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px 2%;
+    }
+
+    header {
+        padding: 0 15px;
+        height: auto;
+        min-height: 80px;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .logo-img {
+        height: 55px;
+    }
+
+    nav ul {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav a {
+        font-size: 0.75rem;
+    }
+
+    h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .navbar, .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .row {
+        grid-template-columns: 1fr; /* Los campos dobles pasan a una sola columna vertical */
+    }
+
+    .registro-card, .history-card {
+        padding: 20px 15px;
+        border-radius: 20px;
+    }
 }
