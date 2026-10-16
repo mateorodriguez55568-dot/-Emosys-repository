@@ -20,17 +20,17 @@
             --font-body: 'Poppins', sans-serif;
         }
 
-        /* Prevención global estricta contra desbordamientos horizontales */
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden !important;
-            margin: 0;
-            padding: 40px 5%;
-            box-sizing: border-box;
-        }
+        /* Prevención global de desbordamientos horizontales */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-width: 100%; }
 
-        * { box-sizing: border-box; }
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 5%;
+            overflow-x: hidden;
+        }
 
         .admin-header {
             display: flex;
@@ -39,7 +39,6 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 20px;
-            width: 100%;
         }
 
         h1 {
@@ -47,7 +46,6 @@
             color: var(--primary);
             text-transform: uppercase;
             font-size: 2rem;
-            word-break: break-word;
         }
 
         .header-actions { display: flex; gap: 15px; align-items: center; }
@@ -68,7 +66,6 @@
             margin-bottom: 25px;
             gap: 20px;
             flex-wrap: wrap;
-            width: 100%;
         }
 
         .search-box {
@@ -189,7 +186,7 @@
         }
 
         /* ==========================================
-           ESTILOS DE LOS MODALES
+           ESTILOS DE LOS MODALES (VENTANAS EMERGENTES)
            ========================================== */
         .modal-overlay {
             display: none; 
@@ -206,7 +203,7 @@
         .modal-content {
             background: #12121a;
             border: 1px solid var(--primary);
-            padding: 30px 20px;
+            padding: 40px;
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
@@ -215,13 +212,12 @@
 
         .modal-content h2 {
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-family: var(--font-heading);
             text-align: center;
-            font-size: 1.3rem;
         }
 
-        .modal-input, .modal-select {
+        .modal-input {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -233,28 +229,61 @@
             outline: none;
         }
 
+        .modal-input:focus { border-color: var(--primary); }
+        
+        .modal-select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #1a1a2e;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: white;
+            font-family: var(--font-body);
+            outline: none;
+            cursor: pointer;
+        }
+
         .modal-actions {
             display: flex;
             gap: 15px;
             margin-top: 20px;
         }
 
-        .btn-cancel, .btn-confirm-delete {
+        .btn-cancel {
             flex: 1;
             padding: 12px;
+            background: transparent;
+            border: 1px solid var(--estres);
+            color: var(--estres);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-cancel:hover { background: var(--estres); color: white; }
+        
+        .btn-confirm-delete {
+            flex: 1;
+            padding: 12px;
+            background: var(--estres);
+            border: none;
+            color: white;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
         }
-        .btn-cancel { background: transparent; border: 1px solid var(--estres); color: var(--estres); }
-        .btn-confirm-delete { background: var(--estres); border: none; color: white; }
+        .btn-confirm-delete:hover { background: #d63356; }
 
+        /* Grid para el formulario de crear (2 columnas) */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        .form-grid .full-width { grid-column: 1 / -1; }
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
 
         /* ==============================
            NAVBAR ADMIN
@@ -264,7 +293,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 18px 30px;
             margin-bottom: 30px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.15);
@@ -274,23 +303,23 @@
 
         .nav-logo {
             font-family: var(--font-heading);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: var(--primary);
             font-weight: 700;
         }
 
         .nav-links {
             display: flex;
-            gap: 15px;
+            gap: 25px;
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: .9rem;
             transition: .3s;
-            padding: 6px 10px;
+            padding: 8px 12px;
             border-radius: 10px;
         }
 
@@ -309,19 +338,18 @@
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
             color: white;
-            padding: 10px 16px;
+            padding: 12px 20px;
             border-radius: 30px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.85rem;
         }
 
         .dropdown {
             display: none;
             position: absolute;
             right: 0;
-            top: 45px;
-            width: 180px;
+            top: 55px;
+            width: 220px;
             background: #15122b;
             border-radius: 15px;
             overflow: hidden;
@@ -331,10 +359,9 @@
 
         .dropdown a {
             display: block;
-            padding: 12px;
+            padding: 15px;
             color: white;
             text-decoration: none;
-            font-size: 0.85rem;
         }
 
         .dropdown a:hover {
@@ -346,62 +373,130 @@
         }
 
         /* ==========================================================
-           MEDIA QUERY ULTRA COMPACTA PARA CELULARES (ADMIN)
+           ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
            ========================================================== */
-        @media screen and (max-width: 768px) {
-            html, body {
-                padding: 10px 2% !important;
-            }
+        
+/* AJUSTES RESPONSIVE DEL PANEL ADMIN */
+@media screen and (max-width: 768px) {
 
-            h1 {
-                font-size: 1.4rem !important;
-            }
+    body {
+        padding: 12px;
+    }
 
-            .navbar {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-                padding: 12px;
-                width: 100%;
-            }
+    .navbar {
+        width: 100%;
+        padding: 15px;
+        gap: 15px;
+        border-radius: 16px;
+    }
 
-            .nav-links {
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 6px;
-            }
+    .nav-logo {
+        text-align: center;
+        font-size: 1.4rem;
+    }
 
-            .nav-links a {
-                font-size: 0.7rem;
-                padding: 5px 8px;
-            }
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
 
-            .admin-header, .tools-bar {
-                flex-direction: column;
-                width: 100%;
-                gap: 10px;
-            }
+    .nav-links a {
+        font-size: 0.75rem;
+        padding: 8px;
+    }
 
-            .search-box {
-                min-width: 100% !important;
-                width: 100% !important;
-            }
+    .user-menu {
+        width: 100%;
+        text-align: center;
+    }
 
-            .admin-card {
-                padding: 15px 10px;
-                border-radius: 15px;
-                width: 100% !important;
-            }
+    .user-button {
+        max-width: 100%;
+        padding: 10px 15px;
+        overflow-wrap: anywhere;
+    }
 
-            .form-grid {
-                grid-template-columns: 1fr !important;
-            }
+    .admin-header {
+        margin: 20px 0;
+    }
 
-            .modal-content {
-                width: 95% !important;
-                padding: 20px 15px;
-            }
-        }
+    .admin-header h1 {
+        font-size: 1.5rem;
+        overflow-wrap: anywhere;
+    }
+
+    .admin-card {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+    }
+
+    .tools-bar {
+        gap: 12px;
+    }
+
+    .search-box {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .btn-glow {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+    }
+
+    .table-wrapper table {
+        width: max-content;
+        min-width: 600px;
+        border-collapse: collapse;
+    }
+
+    .table-wrapper th,
+    .table-wrapper td {
+        padding: 12px;
+        white-space: nowrap;
+    }
+
+    .table-wrapper td {
+        font-size: 0.8rem;
+    }
+
+    .btn-action {
+        margin: 3px;
+        white-space: nowrap;
+    }
+
+    .modal-content {
+        width: calc(100% - 24px);
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .form-grid .full-width {
+        grid-column: 1;
+    }
+
+    .modal-actions {
+        flex-wrap: wrap;
+    }
+}
+
     </style>
 </head>
 
@@ -595,39 +690,31 @@
     </div>
     <!-- NUEVA TARJETA -->
 
-<div class="admin-card" id="sesiones" style="margin-top:30px;"></div>
+<div class="admin-card" id="sesiones" style="margin-top:30px;">
 
     <h2>Sesiones activas e historial</h2>
 
     <br>
 
     <div class="table-wrapper">
-
         <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>ID Sesión</th>
-                    <th>Usuario</th>
-                    <th>Fecha Inicio</th>
-                    <th>Fecha Fin</th>
-                    <th>Estado</th>
-
-                </tr>
-
+            <!-- Conserva aquí tu thead y tbody originales -->
+        <thead>
+            <tr>
+                <th>ID Sesión</th>
+                <th>Usuario</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Estado</th>
+            </tr>
             </thead>
 
-            <tbody id="tabla-sesiones">
-
-            </tbody>
-
+            <tbody id="tabla-sesiones"></tbody>
         </table>
-
     </div>
 
 </div>
+
 <!-- TARJETA DE DIAGNÓSTICOS -->
 
 <div class="admin-card" id="diagnosticos" style="margin-top:30px;">
