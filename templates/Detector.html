@@ -26,7 +26,11 @@
     }
 
     /* Prevención global de desbordamientos horizontales */
-    * { margin: 0; padding: 0; box-sizing: border-box; max-width: 100%; }
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
     body {
         font-family: var(--font-body);
@@ -182,46 +186,66 @@
     }
 
     /* --- Carrusel --- */
-    .carrusel-wrapper { 
-        max-width: 900px; 
-        margin: 30px auto; 
-        overflow: hidden; 
-        border-radius: 25px; 
-        border: 1px solid var(--glass-border); 
-        width: 100%;
-    }
+   
+/* CONTENEDOR DEL CARRUSEL */
+.carrusel-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    overflow: hidden;
+    border-radius: 25px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+}
 
-    .carrusel-track { 
-        display: flex; 
-        width: 300%; 
-        transition: transform 1.2s cubic-bezier(0.45, 0, 0.55, 1); 
-    }
+/* PISTA QUE CONTIENE LAS 3 IMÁGENES */
+.carrusel-track {
+    display: flex;
+    width: 300%;
+    max-width: none;
+    flex-shrink: 0;
+    transition: transform 1.2s cubic-bezier(0.45, 0, 0.55, 1);
+}
 
-    .carrusel-item { 
-        width: 33.333%; 
-        height: 450px; 
-        position: relative; 
-        overflow: hidden;
-        flex: 0 0 33.333%; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-    }
+/* CADA DIAPOSITIVA */
+.carrusel-item {
+    position: relative;
+    width: 33.333333%;
+    flex: 0 0 33.333333%;
+    min-width: 0;
+    height: 450px;
+    overflow: hidden;
 
-    .carrusel-item img { 
-        width: 100%; 
-        height: 100%; 
-        object-fit: cover; 
-        opacity: 0.85; 
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    .carrusel-caption { 
-        position: absolute; 
-        bottom: 0; 
-        width: 100%; 
-        background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
-        padding: 30px; 
-    }
+/* IMAGEN COMPLETA SIN RECORTAR */
+.carrusel-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    object-position: center;
+    opacity: 1;
+}
+
+/* TEXTO SOBRE LA IMAGEN */
+.carrusel-caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.90)
+    );
+    z-index: 1;
+}
+
 
     /* --- Videos --- */
     .video-grid {
@@ -375,18 +399,20 @@
     .tabla-emociones {
         min-width: 450px;
     }
-
     .carrusel-wrapper {
-        width: 100%;
-    }
+    width: 100%;
+    max-width: 100%;
+}
 
-    .carrusel-item {
-        height: 260px;
-    }
+.carrusel-item {
+    height: 280px;
+    flex: 0 0 33.333333%;
+    min-width: 0;
+}
 
-    .carrusel-caption {
-        padding: 15px;
-    }
+.carrusel-item img {
+    object-fit: contain;
+}
 
     .video-grid {
         width: 100%;
@@ -431,6 +457,89 @@
             font-size: 2rem;
         }
     }
+    
+/* EMOJIS DECORATIVOS DE FONDO */
+.background-emojis {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-emoji {
+    position: absolute;
+    top: 20%;
+    font-size: 2rem;
+    opacity: 0.08;
+    user-select: none;
+}
+
+/* TABLA DE RANGOS RESPONSIVE */
+.card-rangos {
+    min-width: 0;
+    width: 100%;
+}
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabla-emociones {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+@media screen and (max-width: 768px) {
+
+    .card-rangos {
+        padding: 15px;
+    }
+
+    .tabla-emociones {
+        min-width: 500px;
+    }
+
+    .tabla-emociones th,
+    .tabla-emociones td {
+        padding: 12px;
+        white-space: nowrap;
+    }
+}
+.user-menu {
+    position: relative;
+    display: inline-block;
+    list-style: none;
+}
+
+@media screen and (max-width: 768px) {
+    nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    nav ul > li {
+        list-style: none;
+    }
+
+    .user-menu {
+        width: auto;
+        max-width: 100%;
+    }
+
+    .user-button {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+}
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -462,7 +571,7 @@
             <li><a href="#estructura">Estructura</a></li>
             <li><a href="#camara">Cámara Web</a></li>
             <li><a href="#Videos">Videos</a></li>
-            <div class="user-menu">
+            <li class="user-menu">
                 <button id="loginButton" class="user-button" onclick="irLogin()">🔑 INICIAR SESIÓN</button>
                 <button id="userButton" class="user-button" onclick="toggleMenu()" style="display:none;">
                     👤 <span id="nombreUsuario">Usuario</span> ▼
@@ -472,7 +581,7 @@
                     <a href="/admin" id="adminOption">⚙ PANEL ADMINISTRADOR</a>
                     <a href="#" onclick="cerrarSesion()">🚪 CERRAR SESIÓN</a>
                 </div>
-            </div>
+            </li>
         </ul>
     </nav>
 </header>
@@ -535,17 +644,22 @@
             </div>
 
             <!-- TABLA -->
-            <div class="info-card card-rangos">
-                <h3>Rangos utilizados</h3>
-                <table class="tabla-emociones">
-                    <tr><th>Estado</th><th>BPM</th><th>Temperatura</th></tr>
+            
+<div class="info-card card-rangos">
+    <h3>Rangos utilizados</h3>
+
+    <div class="table-wrapper">
+        <table class="tabla-emociones">
+            <!-- Conserva aquí todas tus filas originales -->
+        </table>
+    </div>
+</div>
+<tr><th>Estado</th><th>BPM</th><th>Temperatura</th></tr>
                     <tr><td>😴 Cansado</td><td>50 - 65</td><td>35.8 - 36.4°C</td></tr>
                     <tr><td>😊 Relajado</td><td>60 - 80</td><td>36.3 - 36.8°C</td></tr>
                     <tr><td>😁 Feliz</td><td>75 - 95</td><td>36.5 - 37.0°C</td></tr>
                     <tr><td>😟 Nervioso</td><td>96 - 110</td><td>36.8 - 37.3°C</td></tr>
                     <tr><td>😰 Estresado</td><td>111 - 130</td><td>> 37.0°C</td></tr>
-                </table>
-            </div>
 
             <!-- NUEVA SECCIÓN: CÁMARA WEB / MONITOREO VISUAL -->
             <div id="camara" class="info-card card-webcam">
