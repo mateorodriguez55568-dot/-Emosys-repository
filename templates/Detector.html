@@ -540,6 +540,164 @@
         overflow-wrap: anywhere;
     }
 }
+
+/* ==========================================
+   EMOSYS - MONITOREO POR CÁMARA WEB
+   ========================================== */
+
+.card-webcam {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 28px;
+    margin: 30px auto;
+
+    background:
+        radial-gradient(
+            ellipse at top right,
+            rgba(0, 210, 255, 0.08),
+            transparent 55%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(48, 43, 99, 0.95),
+            rgba(36, 36, 62, 0.98)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 5px solid #ff416c;
+    border-radius: 25px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    overflow: hidden;
+}
+
+/* TÍTULO */
+.card-webcam h3 {
+    color: #00d2ff;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+}
+
+/* DESCRIPCIÓN */
+.card-webcam p {
+    color: #e2e8f0;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 22px;
+}
+
+/* ÁREA DE LA CÁMARA */
+.card-webcam video {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    object-fit: contain;
+
+    margin: 10px auto 22px;
+
+    background: #100d25;
+    border: 1px solid rgba(0, 210, 255, 0.25);
+    border-radius: 18px;
+
+    box-shadow: 0 0 25px rgba(0, 210, 255, 0.08);
+}
+
+/* BOTÓN DE ACTIVAR / DESACTIVAR */
+.card-webcam button {
+    align-self: center;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    min-width: 220px;
+    max-width: 100%;
+    padding: 14px 24px;
+
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    background: linear-gradient(
+        135deg,
+        #00b4db,
+        #3a7bd5
+    );
+
+    border: 1px solid rgba(0, 210, 255, 0.4);
+    border-radius: 14px;
+
+    box-shadow: 0 8px 22px rgba(0, 180, 219, 0.2);
+
+    cursor: pointer;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+/* EFECTO AL PASAR EL CURSOR */
+.card-webcam button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 12px 28px rgba(0, 210, 255, 0.3);
+}
+
+/* EFECTO AL PRESIONAR */
+.card-webcam button:active {
+    transform: scale(0.98);
+}
+
+/* CELULARES */
+@media screen and (max-width: 768px) {
+
+    .card-webcam {
+        padding: 20px 16px;
+        margin: 20px auto;
+        border-radius: 20px;
+    }
+
+    .card-webcam h3 {
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    .card-webcam p {
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
+    .card-webcam video {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px auto 20px;
+        border-radius: 14px;
+    }
+
+    .card-webcam button {
+        width: 100%;
+        min-width: 0;
+        padding: 14px 12px;
+        font-size: 0.9rem;
+    }
+}
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -650,16 +808,15 @@
 
     <div class="table-wrapper">
         <table class="tabla-emociones">
-            <!-- Conserva aquí todas tus filas originales -->
-        </table>
-    </div>
-</div>
-<tr><th>Estado</th><th>BPM</th><th>Temperatura</th></tr>
+        <tr><th>Estado</th><th>BPM</th><th>Temperatura</th></tr>
                     <tr><td>😴 Cansado</td><td>50 - 65</td><td>35.8 - 36.4°C</td></tr>
                     <tr><td>😊 Relajado</td><td>60 - 80</td><td>36.3 - 36.8°C</td></tr>
                     <tr><td>😁 Feliz</td><td>75 - 95</td><td>36.5 - 37.0°C</td></tr>
                     <tr><td>😟 Nervioso</td><td>96 - 110</td><td>36.8 - 37.3°C</td></tr>
                     <tr><td>😰 Estresado</td><td>111 - 130</td><td>> 37.0°C</td></tr>
+        </table>
+    </div>
+</div>
 
             <!-- NUEVA SECCIÓN: CÁMARA WEB / MONITOREO VISUAL -->
             <div id="camara" class="info-card card-webcam">
