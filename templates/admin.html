@@ -20,17 +20,17 @@
             --font-body: 'Poppins', sans-serif;
         }
 
-        /* Prevención global de desbordamientos horizontales */
-        * { margin: 0; padding: 0; box-sizing: border-box; max-width: 100%; }
-
-        body {
-            font-family: var(--font-body);
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: var(--text);
-            min-height: 100vh;
+        /* Prevención global estricta contra desbordamientos horizontales */
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden !important;
+            margin: 0;
             padding: 40px 5%;
-            overflow-x: hidden;
+            box-sizing: border-box;
         }
+
+        * { box-sizing: border-box; }
 
         .admin-header {
             display: flex;
@@ -39,6 +39,7 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 20px;
+            width: 100%;
         }
 
         h1 {
@@ -46,6 +47,7 @@
             color: var(--primary);
             text-transform: uppercase;
             font-size: 2rem;
+            word-break: break-word;
         }
 
         .header-actions { display: flex; gap: 15px; align-items: center; }
@@ -66,6 +68,7 @@
             margin-bottom: 25px;
             gap: 20px;
             flex-wrap: wrap;
+            width: 100%;
         }
 
         .search-box {
@@ -186,7 +189,7 @@
         }
 
         /* ==========================================
-           ESTILOS DE LOS MODALES (VENTANAS EMERGENTES)
+           ESTILOS DE LOS MODALES
            ========================================== */
         .modal-overlay {
             display: none; 
@@ -203,7 +206,7 @@
         .modal-content {
             background: #12121a;
             border: 1px solid var(--primary);
-            padding: 40px;
+            padding: 30px 20px;
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
@@ -212,12 +215,13 @@
 
         .modal-content h2 {
             color: var(--primary);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-family: var(--font-heading);
             text-align: center;
+            font-size: 1.3rem;
         }
 
-        .modal-input {
+        .modal-input, .modal-select {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -229,61 +233,28 @@
             outline: none;
         }
 
-        .modal-input:focus { border-color: var(--primary); }
-        
-        .modal-select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: #1a1a2e;
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            color: white;
-            font-family: var(--font-body);
-            outline: none;
-            cursor: pointer;
-        }
-
         .modal-actions {
             display: flex;
             gap: 15px;
             margin-top: 20px;
         }
 
-        .btn-cancel {
+        .btn-cancel, .btn-confirm-delete {
             flex: 1;
             padding: 12px;
-            background: transparent;
-            border: 1px solid var(--estres);
-            color: var(--estres);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .btn-cancel:hover { background: var(--estres); color: white; }
-        
-        .btn-confirm-delete {
-            flex: 1;
-            padding: 12px;
-            background: var(--estres);
-            border: none;
-            color: white;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
         }
-        .btn-confirm-delete:hover { background: #d63356; }
+        .btn-cancel { background: transparent; border: 1px solid var(--estres); color: var(--estres); }
+        .btn-confirm-delete { background: var(--estres); border: none; color: white; }
 
-        /* Grid para el formulario de crear (2 columnas) */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        .form-grid .full-width {
-            grid-column: 1 / -1;
-        }
+        .form-grid .full-width { grid-column: 1 / -1; }
 
         /* ==============================
            NAVBAR ADMIN
@@ -293,7 +264,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 30px;
+            padding: 15px 20px;
             margin-bottom: 30px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.15);
@@ -303,23 +274,23 @@
 
         .nav-logo {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--primary);
             font-weight: 700;
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 15px;
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 600;
-            font-size: .9rem;
+            font-size: 0.8rem;
             transition: .3s;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: 10px;
         }
 
@@ -338,18 +309,19 @@
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 30px;
             cursor: pointer;
             font-weight: 700;
+            font-size: 0.85rem;
         }
 
         .dropdown {
             display: none;
             position: absolute;
             right: 0;
-            top: 55px;
-            width: 220px;
+            top: 45px;
+            width: 180px;
             background: #15122b;
             border-radius: 15px;
             overflow: hidden;
@@ -359,9 +331,10 @@
 
         .dropdown a {
             display: block;
-            padding: 15px;
+            padding: 12px;
             color: white;
             text-decoration: none;
+            font-size: 0.85rem;
         }
 
         .dropdown a:hover {
@@ -373,42 +346,51 @@
         }
 
         /* ==========================================================
-           ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
+           MEDIA QUERY ULTRA COMPACTA PARA CELULARES (ADMIN)
            ========================================================== */
         @media screen and (max-width: 768px) {
-            body {
-                padding: 15px 3%; 
+            html, body {
+                padding: 10px 2% !important;
             }
 
             h1 {
-                font-size: 1.5rem !important;
+                font-size: 1.4rem !important;
             }
 
-            .navbar, .admin-header {
+            .navbar {
                 flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-                padding: 15px;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                width: 100%;
             }
 
             .nav-links {
                 justify-content: center;
                 flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .nav-links a {
+                font-size: 0.7rem;
+                padding: 5px 8px;
+            }
+
+            .admin-header, .tools-bar {
+                flex-direction: column;
+                width: 100%;
                 gap: 10px;
             }
 
-            .header-actions, .tools-bar {
-                flex-direction: column;
-                width: 100%;
-            }
-
             .search-box {
-                min-width: 100%;
+                min-width: 100% !important;
+                width: 100% !important;
             }
 
             .admin-card {
-                padding: 15px;
+                padding: 15px 10px;
                 border-radius: 15px;
+                width: 100% !important;
             }
 
             .form-grid {
@@ -417,8 +399,7 @@
 
             .modal-content {
                 width: 95% !important;
-                padding: 20px;
-                margin: 10px;
+                padding: 20px 15px;
             }
         }
     </style>
