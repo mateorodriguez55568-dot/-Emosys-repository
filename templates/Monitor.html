@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor .AI | Monitor en Vivo</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', filename='ChatGPT Image 10 jul 2026, 09_10_26 a.m..png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -216,6 +216,69 @@
         .dropdown a { display: block; color: white; padding: 15px; text-decoration: none; }
         .dropdown a:hover { background: #3a7bd5; }
         .show { display: block; }
+        /* ==========================================================
+   ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
+   ========================================================== */
+
+/* Asegurar que las tablas no rompan el diseño en pantallas pequeñas */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Ajustes automáticos para pantallas menores a 768px (Celulares) */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 15px 3%; /* Menos espacio en los bordes para aprovechar la pantalla */
+    }
+
+    /* Reducir tamaño de títulos grandes */
+    h1 {
+        font-size: 1.5rem !important;
+    }
+
+    /* Convertir la barra de navegación o headers en columna si se amontonan */
+    .navbar, .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .header-actions, .tools-bar {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .search-box {
+        min-width: 100%;
+    }
+
+    /* Reducir padding de las tarjetas principales en móviles */
+    .admin-card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    /* Los formularios en cuadrícula (grid) pasan a una sola columna vertical */
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Ajustar modales para que ocupen casi toda la pantalla del celular sin desbordarse */
+    .modal-content {
+        width: 95% !important;
+        padding: 20px;
+        margin: 10px;
+    }
+}
     </style>
 </head>
 <body>
