@@ -1,0 +1,181 @@
+:root {
+    --bg-body: #0f0c29;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --primary: #00d2ff;
+    --secondary: #3a7bd5;
+    --estres: #ff416c;
+    --text: #ffffff;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* --- Header --- */
+header{
+    background: rgba(15,12,41,.95);
+    backdrop-filter: blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 40px;
+    height:110px;
+
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo-img{
+    height:82px;
+    width:auto;
+    display:block;
+    transition:.35s;
+    object-fit:contain;
+}
+
+.logo-img:hover{
+    transform:scale(1.05);
+}
+.logo-img:hover { transform: scale(1.05); }
+
+nav ul { display: flex; list-style: none; gap: 30px; }
+nav a { color: white; text-decoration: none; font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+/* --- Tarjeta --- */
+.container { padding: 40px 5%; display: flex; flex-direction: column; align-items: center; }
+
+.registro-card, .history-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h2 { font-family: var(--font-heading); color: var(--primary); margin-bottom: 20px; text-transform: uppercase; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+.input-group { margin-bottom: 20px; text-align: left; }
+label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary); font-weight: 600; }
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: white;
+    font-family: var(--font-body);
+}
+/* Aplicamos los mismos estilos al input y al select */
+input, select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: white;
+    font-family: var(--font-body);
+    box-sizing: border-box; /* Evita que el padding rompa el ancho del 100% */
+}
+
+/* Estilos específicos para el Select */
+select {
+    /* Quitamos la flecha nativa del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    /* Añadimos una flecha personalizada blanca (SVG) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center; /* Posición de la flecha a la derecha */
+    background-size: 12px;
+    padding-right: 35px; /* Espacio para que el texto no choque con la flecha */
+    cursor: pointer;
+}
+
+/* Cambiamos el color de las opciones cuando se despliega el menú 
+   (esto ayuda en navegadores basados en Chrome/Edge/Safari) */
+select option {
+    background: #1a1a2e; /* Usa un color oscuro sólido similar al fondo de tu card */
+    color: white;
+}
+/* --- Botón Neón --- */
+.btn-glow {
+    width: 100%;
+    background: linear-gradient(45deg, var(--primary), var(--estres));
+    border: none;
+    padding: 18px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.4s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-glow:hover {
+    transform: scale(1.02) translateY(-3px);
+    box-shadow: 0 0 40px var(--estres);
+}
+
+.btn-borrar {
+    margin-top: 15px;
+    background: transparent;
+    color: var(--estres);
+    border: 1px solid var(--estres);
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+/* --- Botones de Control de Lista (Ver más / Volver) --- */
+#controles-historial {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-toggle {
+    background: rgba(0, 210, 255, 0.1); /* Fondo sutil */
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-toggle:hover {
+    background: var(--primary);
+    color: #0f0c29; /* Texto oscuro al hacer hover */
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+    transform: translateY(-2px);
+}

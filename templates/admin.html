@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - EMOSYS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --estres: #ff416c;
+            --success: #00ff88;
+            --text: #ffffff;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 5%;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 2rem;
+        }
+
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+
+        .admin-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.3);
+        }
+
+        .tools-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+
+        thead th {
+            color: var(--primary);
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 15px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+
+        tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+
+        tbody td {
+            padding: 15px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+            transition: 0.3s;
+        }
+
+        .btn-edit { background: rgba(0, 210, 255, 0.2); color: var(--primary); }
+        .btn-edit:hover { background: var(--primary); color: #000; }
+
+        .btn-delete { background: rgba(255, 65, 108, 0.2); color: var(--estres); }
+        .btn-delete:hover { background: var(--estres); color: #fff; }
+
+.btn-glow {
+    background: linear-gradient(45deg, var(--primary), var(--estres)); 
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    color: white; 
+    font-weight: 700;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.4s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.btn-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--primary); /* <--- BRILLO CYAN AL HACER HOVER */
+}
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--success);
+        }
+
+        .btn-back {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255,255,255,0.4);
+            font-style: italic;
+        }
+
+        /* ==========================================
+           ESTILOS DE LOS MODALES (VENTANAS EMERGENTES)
+           ========================================== */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #12121a;
+            border: 1px solid var(--primary);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
+        }
+
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-family: var(--font-heading);
+            text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: white;
+            font-family: var(--font-body);
+            outline: none;
+        }
+
+        .modal-input:focus { border-color: var(--primary); }
+        
+        .modal-select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #1a1a2e;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: white;
+            font-family: var(--font-body);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--estres);
+            color: var(--estres);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-cancel:hover { background: var(--estres); color: white; }
+        
+        .btn-confirm-delete {
+            flex: 1;
+            padding: 12px;
+            background: var(--estres);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .btn-confirm-delete:hover { background: #d63356; }
+
+        /* Grid para el formulario de crear (2 columnas) */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+        .user-menu{
+    position:relative;
+    display:inline-block;
+}
+
+
+.user-button{
+
+    background:none;
+    border:none;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    padding:10px;
+
+}
+
+
+.dropdown{
+
+    display:none;
+    position:absolute;
+    right:0;
+    top:45px;
+
+    background:#15122b;
+
+    width:220px;
+
+    border-radius:12px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+
+    overflow:hidden;
+
+    z-index:1000;
+
+}
+
+
+.dropdown a{
+
+    display:block;
+
+    color:white;
+
+    padding:15px;
+
+    text-decoration:none;
+
+}
+
+
+.dropdown a:hover{
+
+    background:#3a7bd5;
+
+}
+
+
+.show{
+
+    display:block;
+
+}
+/* ==============================
+   NAVBAR ADMIN
+============================== */
+
+
+.navbar{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 30px;
+
+    margin-bottom:30px;
+
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    border-radius:20px;
+
+
+    backdrop-filter:blur(15px);
+
+}
+
+
+
+.nav-logo{
+
+    font-family:var(--font-heading);
+
+    font-size:1.5rem;
+
+    color:var(--primary);
+
+    font-weight:700;
+
+}
+
+
+
+.nav-links{
+
+    display:flex;
+
+    gap:25px;
+
+}
+
+
+
+.nav-links a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    font-size:.9rem;
+
+    transition:.3s;
+
+    padding:8px 12px;
+
+    border-radius:10px;
+
+}
+
+
+
+.nav-links a:hover{
+
+    background:rgba(0,210,255,.2);
+
+    color:var(--primary);
+
+}
+
+
+
+/* USUARIO */
+
+
+.user-menu{
+
+    position:relative;
+
+}
+
+
+
+.user-button{
+
+    background:
+
+    linear-gradient(
+    45deg,
+    var(--primary),
+    var(--secondary)
+    );
+
+
+    border:none;
+
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+}
+
+
+
+.dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    right:0;
+
+    top:55px;
+
+
+    width:220px;
+
+
+    background:#15122b;
+
+
+    border-radius:15px;
+
+
+    overflow:hidden;
+
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,.5);
+
+
+    z-index:1000;
+
+}
+
+
+
+.dropdown a{
+
+    display:block;
+
+    padding:15px;
+
+    color:white;
+
+    text-decoration:none;
+
+}
+
+
+
+.dropdown a:hover{
+
+    background:#3a7bd5;
+
+}
+
+
+
+.show{
+
+    display:block;
+
+}
+</style>
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="nav-logo">
+        🧠 EMOSYS
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/">
+            🏠 Inicio
+        </a>
+
+
+        <a href="#usuarios">
+            👥 Usuarios
+        </a>
+
+
+        <a href="#sesiones">
+            📊 Sesiones
+        </a>
+
+
+        <a href="#diagnosticos">
+            🩺 Diagnósticos
+        </a>
+
+
+        <a href="/admin">
+            ⚙ Admin
+        </a>
+
+    </div>
+
+
+
+    <div class="user-menu">
+
+
+        <button 
+        id="loginButton" 
+        class="user-button" 
+        onclick="irLogin()">
+
+            🔑 INICIAR SESIÓN
+
+        </button>
+
+
+
+        <button 
+        id="userButton" 
+        class="user-button" 
+        onclick="toggleMenu()" 
+        style="display:none;">
+
+            👤 
+            <span id="nombreUsuario">
+                Usuario
+            </span>
+            ▼
+
+        </button>
+
+
+
+        <div class="dropdown" id="dropdownMenu">
+
+
+            <a href="/">
+                🏠 Inicio
+            </a>
+
+
+            <a href="/admin">
+                ⚙ Panel Administrador
+            </a>
+
+
+            <a href="#" onclick="cerrarSesion()">
+                🚪 Cerrar Sesión
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</nav>
+<body>
+
+    <!-- MODAL 1: CREAR USUARIO -->
+    <div id="modal-crear" class="modal-overlay">
+        <div class="modal-content">
+            <h2>➕ Nuevo Usuario</h2>
+            <div class="form-grid">
+                <input type="text" id="crear-cedula" class="modal-input" placeholder="Cédula">
+                <input type="number" id="crear-edad" class="modal-input" placeholder="Edad" min="1" max="120">
+                <input type="text" id="crear-nombres" class="modal-input full-width" placeholder="Nombres y Apellidos">
+                <input type="email" id="crear-email" class="modal-input full-width" placeholder="Correo electrónico">
+            <label>Contraseña</label>
+<input 
+    type="password" 
+    id="crear-password"
+    class="modal-input"
+    placeholder="Ingrese una contraseña"
+    required
+>
+                <select id="crear-tipo" class="modal-select full-width">
+                    <option value="" disabled selected>Seleccionar Tipo</option>
+                    <option value="Estudiante">Estudiante</option>
+                    <option value="Docente">Docente</option>
+                    <option value="Administrativo">Administrativo</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button onclick="cerrarModal('modal-crear')" class="btn-cancel">Cancelar</button>
+                <button onclick="crearUsuario()" class="btn-glow" style="flex:1;">Registrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: EDITAR USUARIO -->
+    <div id="modal-editar" class="modal-overlay">
+        <div class="modal-content">
+            <h2>✏️ Editar Usuario</h2>
+            <input type="hidden" id="edit-id">
+            <input type="text" id="edit-nombre" class="modal-input" placeholder="Nombres y Apellidos">
+            <input type="email" id="edit-email" class="modal-input" placeholder="Correo electrónico">
+            <div class="modal-actions">
+                <button onclick="cerrarModal('modal-editar')" class="btn-cancel">Cancelar</button>
+                <button onclick="guardarCambios()" class="btn-glow" style="flex:1;">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: ELIMINAR USUARIO -->
+    <div id="modal-eliminar" class="modal-overlay">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="color: var(--estres);">⚠️ Confirmar Eliminación</h2>
+            <p style="margin-bottom: 25px; opacity: 0.8;">¿Estás seguro de que quieres borrar este usuario? <br><strong>Esta acción no se puede deshacer.</strong></p>
+            <input type="hidden" id="eliminar-id">
+            <div class="modal-actions">
+                <button onclick="cerrarModal('modal-eliminar')" class="btn-cancel" style="flex:1;">Cancelar</button>
+                <button onclick="confirmarEliminacion()" class="btn-confirm-delete" style="flex:1;">Sí, Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="admin-header">
+        <h1>⚙️ Panel Admin</h1>
+    </div>
+
+    <div class="admin-card" id="usuarios">
+        <div class="tools-bar">
+            <div class="search-box">
+                <input type="text" id="buscar-input" placeholder="Buscar por cédula, nombre o email..." onkeyup="filtrarTabla()">
+            </div>
+            <!-- Botón que abre el Modal 1 -->
+            <button onclick="abrirModal('modal-crear')" class="btn-glow">+ Nuevo Usuario</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cédula</th>
+                        <th>Nombres</th>
+                        <th>Edad</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-cuerpo"></tbody>
+            </table>
+            <p id="msg-no-data" class="no-data" style="display: none;">No se encontraron usuarios.</p>
+        </div>
+    </div>
+    <!-- NUEVA TARJETA -->
+
+<div class="admin-card" id="sesiones" style="margin-top:30px;"></div>
+
+    <h2>Sesiones activas e historial</h2>
+
+    <br>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID Sesión</th>
+                    <th>Usuario</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Estado</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="tabla-sesiones">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<!-- TARJETA DE DIAGNÓSTICOS -->
+
+<div class="admin-card" id="diagnosticos" style="margin-top:30px;">
+
+    <h2>🩺 Historial de Diagnósticos</h2>
+
+    <br>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Temperatura</th>
+                    <th>Pulso</th>
+                    <th>Emoción</th>
+                    <th>Fecha</th>
+                    <th>Acción</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody id="tabla-diagnosticos">
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+</div>
+<script>
+   function cerrarSesion(){
+
+
+    const idSesion = localStorage.getItem("idSesion");
+
+
+    if(idSesion){
+
+
+        fetch("/api/cerrar_sesion",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                idSesion:idSesion
+            })
+
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("Sesión cerrada:", data);
+
+        });
+
+    }
+
+
+    localStorage.removeItem("usuarioActual");
+    localStorage.removeItem("idSesion");
+    localStorage.removeItem("sistemaActivo");
+
+
+    window.location.href="/";
+
+}
+function crearUsuario(){
+
+    const cedula = document.getElementById("crear-cedula").value;
+    const edad = document.getElementById("crear-edad").value;
+    const nombres_apellidos = document.getElementById("crear-nombres").value;
+    const email = document.getElementById("crear-email").value;
+    const tipo_usuario = document.getElementById("crear-tipo").value;
+    const password = document.getElementById("crear-password").value;
+
+
+    fetch("/api/crear_usuario", {
+        method: "POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+
+            cedula: cedula,
+
+            nombres_apellidos: nombres_apellidos,
+
+            edad: edad,
+
+            email: email,
+
+            tipo_usuario: tipo_usuario,
+
+            password: password
+
+        })
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        if(data.exito){
+
+            alert("Usuario registrado correctamente");
+
+
+            localStorage.setItem(
+                "usuarioActual",
+                JSON.stringify(data.usuario)
+            );
+
+
+            window.location.href="/";
+
+
+        }else{
+
+            alert("Error: " + data.error);
+
+        }
+
+    })
+
+    .catch(error=>{
+
+        console.error("Error:", error);
+
+        alert("No fue posible conectar con Flask");
+
+    });
+
+}
+
+        // --- FUNCIÓN PARA BUSCAR EN TIEMPO REAL ---
+        function filtrarTabla() {
+            const input = document.getElementById("buscar-input").value.toLowerCase();
+            const filas = document.querySelectorAll("#tabla-cuerpo tr");
+            let hayDatos = false;
+
+            filas.forEach(fila => {
+                const textoFila = fila.textContent.toLowerCase();
+                if (textoFila.includes(input)) {
+                    fila.style.display = "";
+                    hayDatos = true;
+                } else {
+                    fetch("/api/crear_usuario", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        cedula: document.getElementById("cedula").value,
+        nombres_apellidos: document.getElementById("nombres_apellidos").value,
+        edad: document.getElementById("edad").value,
+        email: document.getElementById("email").value,
+        tipo_usuario: document.getElementById("tipo_usuario").value
+    })
+})
+.then(response => response.json())
+.then(data => {
+
+    if (data.exito) {
+
+        alert("Usuario creado correctamente");
+
+        // Guardar usuario actual para usarlo en el diagnóstico
+        localStorage.setItem(
+            "usuarioActual",
+            JSON.stringify(data.usuario)
+        );
+
+        // Redirigir al diagnóstico
+        window.location.href = "/detector";
+
+    } else {
+
+        alert("Error: " + data.error);
+
+    }
+
+})
+.catch(error => {
+    console.error("Error al crear usuario:", error);
+    alert("No fue posible conectar con Flask");
+});
+                    fila.style.display = "none";
+                }
+            });
+
+            document.getElementById("msg-no-data").style.display = hayDatos ? "none" : "block";
+        }
+
+        // --- FUNCIÓN PARA CARGAR DATOS DESDE LA BASE DE DATOS ---
+        function cargarUsuarios() {
+            // fetch() llama a tu archivo de backend (Ej: obtener_usuarios.php)
+            fetch('/api/usuarios')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("tabla-cuerpo");
+                    tbody.innerHTML = ""; // Limpiamos la tabla
+
+                    if (data.length > 0) {
+                        data.forEach(usuario => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${usuario.id}</td>
+                                <td>${usuario.cedula}</td>
+                                <td>${usuario.nombres_apellidos}</td>
+                                <td>${usuario.edad}</td>
+                                <td>${usuario.email}</td>
+                                <td>${usuario.tipo_usuario}</td>
+                               <td>
+
+    <button
+        onclick="editarUsuario(
+            ${usuario.id},
+            '${usuario.nombres_apellidos}',
+            '${usuario.email}'
+        )"
+        class="btn-action btn-edit">
+
+        ✏️ Editar
+
+    </button>
+
+    <button
+        onclick="eliminarUsuario(${usuario.id})"
+        class="btn-action btn-delete">
+
+        🗑️ Eliminar
+
+    </button>
+
+</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        document.getElementById("msg-no-data").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al conectar con la base de datos:", error);
+                    document.getElementById("msg-no-data").textContent = "Error de conexión con el servidor.";
+                    document.getElementById("msg-no-data").style.display = "block";
+                });
+        }
+let usuarioAEliminarId = null;
+
+// Abre el modal y guarda el ID temporalmente
+function eliminarUsuario(id) {
+    usuarioAEliminarId = id;
+    document.getElementById("eliminar-id").value = id;
+    abrirModal("modal-eliminar");
+}
+
+// Ejecuta la petición DELETE cuando se presiona "Sí, Eliminar" en el modal
+function confirmarEliminacion() {
+    if (!usuarioAEliminarId) return;
+
+    fetch(`/api/eliminar_usuario/${usuarioAEliminarId}`, {
+        method: "DELETE"
+    })
+    .then(async response => {
+        const data = await response.json();
+        if (!response.ok || !data.exito) {
+            throw new Error(data.error || "No se pudo eliminar el usuario.");
+        }
+        return data;
+    })
+    .then(data => {
+        cerrarModal("modal-eliminar");
+        alert("Usuario eliminado correctamente.");
+        cargarUsuarios();
+    })
+    .catch(error => {
+        cerrarModal("modal-eliminar");
+        // Muestra un mensaje comprensible si el usuario tiene sesiones activas/registradas
+        if (error.message.includes("viola la llave foránea") || error.message.includes("sesiones")) {
+            alert("No se puede eliminar este usuario porque tiene sesiones activas o asociadas en el sistema.");
+        } else {
+            alert("Error: " + error.message);
+        }
+    });
+}
+function abrirModal(id){
+    document.getElementById(id).style.display = "flex";
+}
+
+function cerrarModal(id){
+    document.getElementById(id).style.display = "none";
+}
+function cerrarSesion(){
+
+
+    const idSesion = localStorage.getItem("idSesion");
+
+
+    if(idSesion){
+
+
+        fetch("/api/cerrar_sesion",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                idSesion:idSesion
+            })
+
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("Sesión cerrada:", data);
+
+        });
+
+    }
+
+
+    localStorage.removeItem("usuarioActual");
+    localStorage.removeItem("idSesion");
+    localStorage.removeItem("sistemaActivo");
+
+
+    window.location.href="/";
+
+}
+
+        // --- FUNCIÓN PARA BUSCAR EN TIEMPO REAL ---
+        function filtrarTabla() {
+            const input = document.getElementById("buscar-input").value.toLowerCase();
+            const filas = document.querySelectorAll("#tabla-cuerpo tr");
+            let hayDatos = false;
+
+            filas.forEach(fila => {
+                const textoFila = fila.textContent.toLowerCase();
+                if (textoFila.includes(input)) {
+                    fila.style.display = "";
+                    hayDatos = true;
+                } else {
+                    fila.style.display = "none";
+                }
+            });
+
+            document.getElementById("msg-no-data").style.display = hayDatos ? "none" : "block";
+        }
+
+        // --- FUNCIÓN PARA CARGAR DATOS DESDE LA BASE DE DATOS ---
+        function cargarUsuarios() {
+            // fetch() llama a tu archivo de backend (Ej: obtener_usuarios.php)
+            fetch('/api/usuarios')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("tabla-cuerpo");
+                    tbody.innerHTML = ""; // Limpiamos la tabla
+
+                    if (data.length > 0) {
+                        data.forEach(usuario => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${usuario.id}</td>
+                                <td>${usuario.cedula}</td>
+                                <td>${usuario.nombres_apellidos}</td>
+                                <td>${usuario.edad}</td>
+                                <td>${usuario.email}</td>
+                                <td>${usuario.tipo_usuario}</td>
+                                <td>
+
+    <button
+        onclick="editarUsuario(
+            ${usuario.id},
+            '${usuario.nombres_apellidos}',
+            '${usuario.email}'
+        )"
+        class="btn-action btn-edit">
+
+        ✏️ Editar
+
+    </button>
+
+    <button
+        onclick="eliminarUsuario(${usuario.id})"
+        class="btn-action btn-delete">
+
+        🗑️ Eliminar
+
+    </button>
+
+</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        document.getElementById("msg-no-data").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al conectar con la base de datos:", error);
+                    document.getElementById("msg-no-data").textContent = "Error de conexión con el servidor.";
+                    document.getElementById("msg-no-data").style.display = "block";
+                });
+        }
+function eliminarUsuario(id){
+
+    if(confirm("¿Eliminar usuario?")){
+
+        fetch(`/api/eliminar_usuario/${id}`,{
+
+            method:"DELETE"
+
+        })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            if(data.exito){
+
+                alert("Usuario eliminado correctamente.");
+
+                cargarUsuarios();
+
+            }else{
+
+                alert(data.error);
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            alert("Error al eliminar el usuario.");
+
+        });
+
+    }
+
+}
+ function cargarSesiones(){
+
+    fetch("/api/sesiones")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        const tbody =
+        document.getElementById("tabla-sesiones");
+
+        tbody.innerHTML = "";
+
+        data.forEach(sesion => {
+
+            const tr = document.createElement("tr");
+
+         tr.innerHTML = `
+
+    <td>${sesion.id}</td>
+    <td>${sesion.nombres_apellidos}</td>
+    <td>${sesion.fecha_inicio}</td>
+    <td>${sesion.fecha_fin || "En sesión"}</td>
+    <td>${sesion.estado}</td>
+
+`;
+
+            tbody.appendChild(tr);
+
+        });
+
+    });
+
+}
+function cargarDiagnosticos(){
+
+    fetch("/api/diagnosticos")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+
+        const tbody =
+        document.getElementById("tabla-diagnosticos");
+
+
+        tbody.innerHTML="";
+
+
+        if(data.length === 0){
+
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    No existen diagnósticos registrados.
+                </td>
+            </tr>
+            `;
+
+            return;
+        }
+
+
+
+        data.forEach(diagnostico=>{
+
+
+            const tr=document.createElement("tr");
+
+
+            tr.innerHTML=`
+
+                <td>${diagnostico.id}</td>
+
+                <td>
+                ${diagnostico.nombres_apellidos}
+                </td>
+
+                <td>
+                ${diagnostico.email}
+                </td>
+
+
+                <td>
+                ${diagnostico.temperatura} °C
+                </td>
+
+
+                <td>
+                ${diagnostico.pulso} BPM
+                </td>
+
+
+                <td>
+                ${diagnostico.emocion}
+                </td>
+
+
+                <td>
+                ${diagnostico.fecha}
+                </td>
+                <td>
+                    <td>
+
+<button 
+class="btn-action btn-edit"
+onclick="enviarReporte(${diagnostico.id})">
+
+📩 Enviar
+
+</button>
+
+</td>
+
+</td>
+            `;
+
+
+            tbody.appendChild(tr);
+
+
+        });
+
+
+    })
+
+    .catch(error=>{
+
+        console.error(
+            "Error cargando diagnósticos:",
+            error
+        );
+
+    });
+
+}
+document.addEventListener("DOMContentLoaded", () => {
+
+    const usuario = JSON.parse(
+        localStorage.getItem("usuarioActual")
+    );
+
+    if (!usuario) {
+
+        window.location.href = "/login";
+        return;
+
+    }
+
+    if (usuario.tipo_usuario !== "admin") {
+
+        alert("No tienes permisos.");
+        window.location.href = "/";
+        return;
+
+    }
+
+    cargarUsuarios();
+cargarSesiones();
+cargarDiagnosticos();
+
+});
+
+ function cargarSesiones(){
+
+    fetch("/api/sesiones")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        const tbody =
+        document.getElementById("tabla-sesiones");
+
+        tbody.innerHTML = "";
+
+        data.forEach(sesion => {
+
+            const tr = document.createElement("tr");
+
+         tr.innerHTML = `
+
+    <td>${sesion.id}</td>
+    <td>${sesion.nombres_apellidos}</td>
+    <td>${sesion.fecha_inicio}</td>
+    <td>${sesion.fecha_fin || "En sesión"}</td>
+    <td>${sesion.estado}</td>
+
+`;
+
+            tbody.appendChild(tr);
+
+        });
+
+    });
+
+}
+function cargarDiagnosticos(){
+
+    fetch("/api/diagnosticos")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+
+        const tbody =
+        document.getElementById("tabla-diagnosticos");
+
+
+        tbody.innerHTML="";
+
+
+        if(data.length === 0){
+
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    No existen diagnósticos registrados.
+                </td>
+            </tr>
+            `;
+
+            return;
+        }
+
+
+
+        data.forEach(diagnostico=>{
+
+
+            const tr=document.createElement("tr");
+
+
+            tr.innerHTML=`
+
+                <td>${diagnostico.id}</td>
+
+                <td>
+                ${diagnostico.nombres_apellidos}
+                </td>
+
+                <td>
+                ${diagnostico.email}
+                </td>
+
+
+                <td>
+                ${diagnostico.temperatura} °C
+                </td>
+
+
+                <td>
+                ${diagnostico.pulso} BPM
+                </td>
+
+
+                <td>
+                ${diagnostico.emocion}
+                </td>
+
+
+                <td>
+                ${diagnostico.fecha}
+                </td>
+               <td>
+<td>
+
+<button 
+class="btn-action btn-edit"
+onclick="enviarReporte(${diagnostico.id})">
+
+📩 Enviar
+
+</button>
+
+</td>
+            `;
+
+
+            tbody.appendChild(tr);
+
+
+        });
+
+
+    })
+
+    .catch(error=>{
+
+        console.error(
+            "Error cargando diagnósticos:",
+            error
+        );
+
+    });
+
+}
+function editarUsuario(id, nombre, email){
+
+    document.getElementById("edit-id").value = id;
+    document.getElementById("edit-nombre").value = nombre;
+    document.getElementById("edit-email").value = email;
+
+    document.getElementById("modal-editar").style.display = "flex";
+}
+function guardarCambios(){
+
+    const id = document.getElementById("edit-id").value;
+
+    const nombres_apellidos =
+        document.getElementById("edit-nombre").value;
+
+    const email =
+        document.getElementById("edit-email").value;
+
+    fetch(`/api/editar_usuario/${id}`,{
+
+        method:"PUT",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            nombres_apellidos:nombres_apellidos,
+            email:email
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        if(data.exito){
+
+            alert("Usuario actualizado correctamente");
+
+            document.getElementById("modal-editar").style.display = "none";
+
+            cargarUsuarios();
+
+        }else{
+
+            alert(data.error);
+        }
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        alert("Error al actualizar usuario");
+
+    });
+}
+window.onload = function(){
+
+    let usuario = localStorage.getItem("usuarioActual");
+
+
+    if(usuario){
+
+        usuario = JSON.parse(usuario);
+
+
+        // Mostrar usuario
+        document.getElementById("userButton")
+        .style.display="block";
+
+
+        document.getElementById("loginButton")
+        .style.display="none";
+
+
+        document.getElementById("nombreUsuario")
+        .innerText = usuario.nombre;
+
+
+
+        // Si NO es administrador ocultar panel admin
+
+        if(usuario.tipo_usuario !== "admin"){
+
+            document.getElementById("adminOption")
+            .style.display="none";
+
+        }
+
+
+    }else{
+
+
+        // No hay usuario conectado
+
+        document.getElementById("userButton")
+        .style.display="none";
+
+
+        document.getElementById("loginButton")
+        .style.display="block";
+
+
+    }
+
+};
+function toggleMenu(){
+
+    document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+
+}
+
+
+function cerrarSesion(){
+
+    localStorage.removeItem("usuarioActual");
+
+    window.location.reload();
+
+}
+
+
+function irLogin(){
+
+    window.location.href="/login";
+
+}
+function enviarReporte(id){
+
+
+fetch(`/api/enviar_reporte/${id}`,{
+
+method:"POST"
+
+})
+
+
+.then(res=>res.json())
+
+.then(data=>{
+
+
+if(data.exito){
+
+alert("Reporte enviado correctamente 📩");
+
+}else{
+
+alert(data.error);
+
+}
+
+
+})
+
+
+.catch(error=>{
+
+console.error(error);
+
+alert("Error enviando reporte");
+
+});
+
+
+}
+document.addEventListener("DOMContentLoaded", () => {
+
+    const usuario = JSON.parse(
+        localStorage.getItem("usuarioActual")
+    );
+
+    if (!usuario) {
+
+        window.location.href = "/login";
+        return;
+
+    }
+
+    if (usuario.tipo_usuario !== "admin") {
+
+        alert("No tienes permisos.");
+        window.location.href = "/";
+        return;
+
+    }
+
+    cargarUsuarios();
+cargarSesiones();
+cargarDiagnosticos();
+
+});
+
+    
+</script>
+</body>
+</html>

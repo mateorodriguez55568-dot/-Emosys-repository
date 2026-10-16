@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMOSYS | Proyecto Integrador</title>
+    
+    <link rel="icon" href="LOGO_emotic-Photoroom.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+    :root {
+        --bg-body: #0f0c29;
+        --glass: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.15);
+        --primary: #00d2ff;
+        --secondary: #3a7bd5;
+        --estres: #ff416c;
+        --alegria: #00ffb3; /* Variable agregada para evitar errores en subtítulos */
+        --text: #ffffff;
+        --font-heading: 'Space Grotesk', sans-serif;
+        --font-body: 'Poppins', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: var(--font-body);
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: var(--text);
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, nav a, .btn-glow { font-family: var(--font-heading); text-align: center; }
+
+    /* --- Header --- */
+    header {
+        background: rgba(15,12,41,.95);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid rgba(255,255,255,.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        height: 110px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo-img {
+        height: 115px;
+        width: auto;
+        display: block;
+        transition: .35s;
+        object-fit: contain;
+    }
+
+    .logo-img:hover { transform: scale(1.05); }
+
+    .nav-pulse {
+        flex: 1;
+        margin: 0 35px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+    }
+    .pulse-svg-nav { width: 100%; height: 100%; }
+    .pulse-path-nav { fill: none; stroke: var(--primary); stroke-width: 2; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawPulse 4s linear infinite; opacity: 0.5; }
+
+    nav ul { display: flex; list-style: none; gap: 25px; align-items: center; }
+    nav a { color: white; text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+    section { 
+        padding: 40px 10%; 
+        scroll-margin-top: 110px; 
+    }
+
+    #Información {
+        scroll-margin-top: 120px; 
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* --- HERO / POSTER --- */
+    .hero-section {
+        position: relative;
+        min-height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 120px;
+    }
+
+    .hero-section video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .hero { text-align: center; padding: 60px 10%; }
+    .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800;
+        background: linear-gradient(to right, #00d2ff, #3a7bd5);
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+        text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
+    }
+
+    /* --- Info Cards --- */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 30px; 
+        margin: 60px 0;
+        text-align: left;
+        width: 100%;
+    }
+
+    .info-card {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        padding: 25px;
+        border-radius: 25px;
+        backdrop-filter: blur(10px);
+        transition: 0.4s;
+        min-width: 0;
+    }
+    .info-card:hover { border-color: var(--primary); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.1); }
+    .info-card h3 { color: var(--primary); margin-bottom: 20px; font-size: 1.6rem; text-align: left; text-transform: uppercase; }
+    .info-card p { font-size: 1.1rem; line-height: 1.8; opacity: 0.95; font-family: var(--font-body); font-weight: 400; text-align: justify; }
+
+    .card-intro { border-left: 5px solid #00d2ff; }
+    .card-funcionamiento { border-left: 5px solid #3a7bd5; }
+    .card-estados { border-left: 5px solid #00ffb3; }
+    .card-rangos { border-left: 5px solid #ffb347; }
+    .card-webcam { border-left: 5px solid #ff416c; grid-column: 1 / span 2; } /* Ocupa todo el ancho */
+
+    .sensor-list { margin: 15px 0; padding-left: 20px; }
+    .sensor-list li { margin-bottom: 10px; }
+
+    .img-sistema { width: 100%; border-radius: 15px; margin-top: 15px; }
+
+    .emociones-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        text-align: center;
+        gap: 15px;
+        margin: 20px 0;
+    }
+    .emociones-grid span { font-size: 3rem; }
+
+    .tabla-emociones { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .tabla-emociones th { background: #1b4d80; color: white; padding: 12px; }
+    .tabla-emociones td { padding: 12px; border: 1px solid rgba(255,255,255,.15); text-align: center; }
+    .tabla-emociones tr:hover { background: rgba(255,255,255,.05); }
+
+    .conclusion-card {
+        grid-column: 1 / span 2;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .conclusion-card, .info-grid {
+            grid-template-columns: 1fr;
+        }
+        .conclusion-card { grid-column: 1; }
+    }
+
+    .galeria-header {
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+        margin-bottom: 10px; font-size: 3rem;
+    }
+
+    /* --- Carrusel --- */
+    .carrusel-wrapper { 
+        max-width: 900px; 
+        margin: 30px auto; 
+        overflow: hidden; 
+        border-radius: 25px; 
+        border: 1px solid var(--glass-border); 
+    }
+
+    .carrusel-track { 
+        display: flex; 
+        width: 300%; 
+        transition: transform 1.2s cubic-bezier(0.45, 0, 0.55, 1); 
+    }
+
+    .carrusel-item { 
+        width: 33.333%; 
+        height: 450px; 
+        position: relative; 
+        overflow: hidden;
+        flex: 0 0 33.333%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+    }
+
+    #track1 .carrusel-item img, #track2 .carrusel-item img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        opacity: 0.85; 
+    }
+
+    .carrusel-caption { 
+        position: absolute; 
+        bottom: 0; 
+        width: 100%; 
+        background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
+        padding: 30px; 
+    }
+
+    /* --- Webcam Estilos --- */
+    .webcam-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .webcam-video {
+        width: 100%;
+        max-width: 640px;
+        height: auto;
+        border-radius: 15px;
+        border: 2px solid var(--primary);
+        background: #000;
+    }
+    .btn-webcam {
+        margin-top: 15px;
+        padding: 12px 25px;
+        background: var(--primary);
+        border: none;
+        border-radius: 25px;
+        color: #0f0c29;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .btn-webcam:hover {
+        background: var(--secondary);
+        color: white;
+        transform: scale(1.05);
+    }
+
+    /* --- Videos --- */
+    .video-grid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+        margin: 30px auto;
+    }
+
+    .video-container {
+        width: 700px;
+        aspect-ratio: 16/9;
+    }
+    .video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 15px;
+    }
+
+    /* --- Fondos decorativos --- */
+    .background-emojis {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        z-index: -1; overflow: hidden; pointer-events: none;
+    }
+    .floating-emoji {
+        position: absolute; font-size: 2rem; opacity: 0.1;
+        animation: floatAnimation 15s linear infinite;
+    }
+    @keyframes floatAnimation {
+        0% { transform: translateY(110vh) rotate(0deg); }
+        100% { transform: translateY(-10vh) rotate(360deg); }
+    }
+
+    footer { padding: 40px; text-align: center; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); font-size: 0.9rem; }
+
+    /* Menú Desplegable de Usuario */
+    .user-menu { position: relative; display: inline-block; }
+    .user-button { background: none; border: none; color: white; font-size: 16px; cursor: pointer; padding: 10px; }
+    .dropdown {
+        display: none; position: absolute; right: 0; top: 45px;
+        background: #15122b; width: 220px; border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; z-index: 1000;
+    }
+    .dropdown a { display: block; color: white; padding: 15px; text-decoration: none; }
+    .dropdown a:hover { background: #3a7bd5; }
+    .show { display: block; }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="background-emojis">
+    <span class="floating-emoji" style="left: 10%;">❤️</span>
+    <span class="floating-emoji" style="left: 25%;">🩺</span>
+    <span class="floating-emoji" style="left: 40%;">⚡</span>
+    <span class="floating-emoji" style="left: 55%;">🏥</span>
+    <span class="floating-emoji" style="left: 70%;">🌡️</span>
+</div>
+
+<header>
+    <a href="/">
+        <img src="{{ url_for('static', filename='poster de encabezados-Photoroom.png') }}" class="logo-img" alt="Logo de EMOSYS">
+    </a>
+    <div class="nav-pulse">
+        <svg class="pulse-svg-nav" viewBox="0 0 600 40">
+            <path class="pulse-path-nav" d="M0,20 L250,20 L260,5 L270,35 L280,20 L320,20 L330,0 L340,40 L350,20 L600,20" />
+        </svg>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#Información">Información</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#estructura">Estructura</a></li>
+            <li><a href="#camara">Cámara Web</a></li>
+            <li><a href="#Videos">Videos</a></li>
+            <div class="user-menu">
+                <button id="loginButton" class="user-button" onclick="irLogin()">🔑 INICIAR SESIÓN</button>
+                <button id="userButton" class="user-button" onclick="toggleMenu()" style="display:none;">
+                    👤 <span id="nombreUsuario">Usuario</span> ▼
+                </button>
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="/Monitor">📱 MONITOR</a>
+                    <a href="/admin" id="adminOption">⚙ PANEL ADMINISTRADOR</a>
+                    <a href="#" onclick="cerrarSesion()">🚪 CERRAR SESIÓN</a>
+                </div>
+            </div>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="poster" class="hero-section">
+        <video autoplay muted loop playsinline class="video-bg">
+            <source src="{{ url_for('static', filename='poster.mp4') }}" type="video/mp4">
+            Tu navegador no soporta videos.
+        </video>
+    </section>
+
+    <section id="Información" class="hero">
+        <div class="info-grid">
+
+            <!-- INTRODUCCIÓN -->
+            <div class="info-card card-intro">
+                <h3>¿Qué es EMOSYS?</h3>
+                <p>
+                    EMOSYS es un sistema inteligente basado en <strong>Arduino Nano</strong>
+                    que utiliza sensores biométricos para estimar el estado emocional
+                    del usuario mediante la medición de la <strong>frecuencia cardíaca</strong>
+                    y la <strong>temperatura corporal</strong>.
+                </p>
+                <p>
+                    La información obtenida se procesa y se presenta en una
+                    <strong>interfaz web</strong> sencilla para facilitar la interpretación
+                    de los resultados.
+                </p>
+                <img src="{{ url_for('static', filename='poster de encabezados.jpeg') }}" alt="Sistema EMOSYS" class="img-sistema">
+            </div>
+
+            <!-- FUNCIONAMIENTO -->
+            <div class="info-card card-funcionamiento">
+                <h3>¿Cómo funciona?</h3>
+                <p>El sistema registra datos biométricos mediante:</p>
+                <ul class="sensor-list">
+                    <li>❤️ Sensor KY-039 → Frecuencia cardíaca</li>
+                    <li>🌡️ Sensor MLX90614 → Temperatura corporal</li>
+                </ul>
+                <p>
+                    Para obtener una lectura estable se recomienda mantener
+                    el dedo sobre los sensores durante aproximadamente
+                    <strong>15 segundos</strong>.
+                </p>
+                <img src="{{ url_for('static', filename='modulo completo.png') }}" alt="Sistema EMOSYS" class="img-sistema">
+            </div>
+
+            <!-- ESTADOS -->
+            <div class="info-card card-estados">
+                <h3>Estados detectados</h3>
+                <div class="emociones-grid">
+                    <div><span>😴</span><p>Cansado</p></div>
+                    <div><span>😊</span><p>Relajado</p></div>
+                    <div><span>😁</span><p>Feliz</p></div>
+                    <div><span>😟</span><p>Nervioso</p></div>
+                    <div><span>😰</span><p>Estresado</p></div>
+                </div>
+                <p>EMOSYS estima el estado emocional utilizando los valores promedio de frecuencia cardíaca (BPM) y temperatura corporal.</p>
+            </div>
+
+            <!-- TABLA -->
+            <div class="info-card card-rangos">
+                <h3>Rangos utilizados</h3>
+                <table class="tabla-emociones">
+                    <tr><th>Estado</th><th>BPM</th><th>Temperatura</th></tr>
+                    <tr><td>😴 Cansado</td><td>50 - 65</td><td>35.8 - 36.4°C</td></tr>
+                    <tr><td>😊 Relajado</td><td>60 - 80</td><td>36.3 - 36.8°C</td></tr>
+                    <tr><td>😁 Feliz</td><td>75 - 95</td><td>36.5 - 37.0°C</td></tr>
+                    <tr><td>😟 Nervioso</td><td>96 - 110</td><td>36.8 - 37.3°C</td></tr>
+                    <tr><td>😰 Estresado</td><td>111 - 130</td><td>> 37.0°C</td></tr>
+                </table>
+            </div>
+
+            <!-- NUEVA SECCIÓN: CÁMARA WEB / MONITOREO VISUAL -->
+            <div id="camara" class="info-card card-webcam">
+                <h3>Monitoreo por Cámara Web</h3>
+                <p>Visualiza en tiempo real la transmisión de la cámara web para complementar el análisis del entorno del usuario.</p>
+                <div class="webcam-container">
+                    <video id="webcamFeed" autoplay playsinline class="webcam-video"></video>
+                    <button class="btn-webcam" onclick="toggleWebcam()">Activar / Desactivar Cámara</button>
+                </div>
+            </div>
+
+            <!-- CONCLUSIÓN -->
+            <div class="info-card conclusion-card">
+                <h3>Conclusión</h3>
+                <p>
+                    EMOSYS demuestra cómo la combinación de <strong>Arduino</strong>, sensores biométricos y desarrollo web
+                    permite estimar estados emocionales de forma rápida y sencilla, fortaleciendo conocimientos de
+                    <strong>programación y tecnología</strong>.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- GALERÍA 1 -->
+    <section id="galeria">
+        <h1 class="galeria-header">Galería</h1>
+        <h3 style="color: var(--alegria); font-size: 1.2rem; margin-bottom: 30px; letter-spacing: 2px;">EL DETECTOR DE EMOCIONES PUEDE DETECTAR:</h3>
+        <div class="carrusel-wrapper">
+            <div class="carrusel-track" id="track1">
+                <div class="carrusel-item">
+                    <img src="{{ url_for('static', filename='chicarelajadagif.gif') }}" alt="Relajación">
+                    <div class="carrusel-caption"><h3>ESTADO RELAJADO</h3><p>Calma detectada mediante homeostasis.</p></div>
+                </div>
+                <div class="carrusel-item">
+                    <img src="{{ url_for('static', filename='alegregif.gif') }}" alt="Alegría">
+                    <div class="carrusel-caption"><h3>ESTADO ALEGRÍA</h3><p>Energía positiva registrada en biosensores.</p></div>
+                </div>
+                <div class="carrusel-item">
+                    <img src="{{ url_for('static', filename='caraestresgif.gif') }}" alt="Estrés">
+                    <div class="carrusel-caption"><h3>ESTADO ESTRÉS</h3><p>Alerta sistémica por cortisol elevado.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERÍA 2 (ID cambiado a "estructura" para evitar duplicados) -->
+    <section id="estructura">
+        <h3 style="color: var(--alegria); font-size: 1.2rem; margin-bottom: 30px; letter-spacing: 2px;">ESTRUCTURA DEL FUNCIONAMIENTO:</h3>
+        <div class="carrusel-wrapper">
+            <div class="carrusel-track" id="track2">
+                <div class="carrusel-item">
+                    <img src="{{ url_for('static', filename='imagen 1.jpeg') }}" alt="Estructura 1">
+                    <div class="carrusel-caption"><p>Funcionamiento.</p></div>
+                </div>
+                <div class="carrusel-item">
+                    <img src="{{ url_for('static', filename='imagen 2.jpeg') }}" alt="Estructura 2">
+                    <div class="carrusel-caption"><p>Funcionamiento.</p></div>
+                </div>
+                <div class="carrusel-item">
+                    <img src="{{ url_for('static', filename='modulo completo.png') }}" alt="Modulo completo">
+                    <div class="carrusel-caption"><p>Funcionamiento.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE VIDEOS -->
+    <section id="Videos" class="video-seccion">
+        <h2 class="galeria-header">Videos del Proyecto</h2>
+        <div class="video-grid">
+            <div class="video-container">
+                <video controls poster="{{ url_for('static', filename='portada videos.jpeg') }}">
+                    <source src="{{ url_for('static', filename='video sobo emosys.mp4') }}" type="video/mp4">
+                    Tu navegador no soporta videos.
+                </video>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>Desarrollado por el <strong>3ro de Bachillerato Técnico</strong></p>
+    <p style="opacity: 0.5; margin-top: 10px;">Diseño y Desarrollo Web | 2026</p>
+</footer>
+
+<script>
+    // Función para activar/desactivar la cámara web
+    let webcamStream = null;
+    async function toggleWebcam() {
+        const videoElement = document.getElementById('webcamFeed');
+        if (!webcamStream) {
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = webcamStream;
+            } catch (error) {
+                alert("No se pudo acceder a la cámara web. Asegúrate de dar permisos.");
+                console.error(error);
+            }
+        } else {
+            webcamStream.getTracks().forEach(track => track.stop());
+            videoElement.srcObject = null;
+            webcamStream = null;
+        }
+    }
+</script>
+
+</body>
+
+<script>
+
+// ==========================================
+// SISTEMA DE SESIÓN, ROLES Y BOTONES
+// ==========================================
+function cerrarSesion() {
+
+    const idSesion = localStorage.getItem("idSesion");
+
+
+    if(idSesion){
+
+        fetch("/api/cerrar_sesion", {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                idSesion:idSesion
+            })
+
+        })
+        .then(res=>res.json())
+        .then(data=>{
+
+            console.log("Sesión cerrada:",data);
+
+
+            localStorage.removeItem("usuarioActual");
+            localStorage.removeItem("idSesion");
+            localStorage.removeItem("sistemaActivo");
+
+
+            window.location.href="/";
+
+        });
+
+
+    }else{
+
+        localStorage.clear();
+        window.location.href="/";
+
+    }
+
+}
+// BOTÓN "¡PruÉBALO YA!"
+function verificarSesion(){
+
+    const usuario = JSON.parse(
+        localStorage.getItem("usuarioActual")
+    );
+
+    if(!usuario){
+
+        alert("Debes iniciar sesión para continuar.");
+        window.location.href = "/login";
+        return false;
+
+    }
+
+    window.location.href = "/Monitor";
+    return false;
+
+}
+
+
+// AL CARGAR LA PÁGINA
+document.addEventListener("DOMContentLoaded", ()=>{
+
+    const usuario = JSON.parse(
+        localStorage.getItem("usuarioActual")
+    );
+
+
+    // SI HAY SESIÓN INICIADA
+    if(usuario){
+
+        document.getElementById("btn-login-nav").style.display = "none";
+
+        document.getElementById("saludo-usuario-nav").style.display = "block";
+
+        document.getElementById("nombre-usuario-nav").textContent =
+        usuario.nombre;
+
+        document.getElementById("btn-monitor").style.display = "block";
+
+        document.getElementById("contenedor-cerrar-sesion").style.display =
+        "block";
+
+    }
+
+});
+
+    function bloquearRegistro() {
+        const formRegistro = document.getElementById('form-registro');
+        if(formRegistro) {
+            const elementos = formRegistro.querySelectorAll('input, select, button, textarea');
+            elementos.forEach(el => {
+                el.disabled = true;
+                el.style.opacity = '0.5';
+                el.style.pointerEvents = 'none';
+            });
+            const btnPrincipal = formRegistro.querySelector('button[type="submit"]');
+            if(btnPrincipal) {
+                btnPrincipal.textContent = '✅ Sesión activa';
+                btnPrincipal.style.background = 'rgba(255,255,255,0.2)';
+                btnPrincipal.style.boxShadow = 'none';
+            }
+        }
+    }
+
+    // ==========================================
+    // CÓDIGO SUPABASE Y COMENTARIOS LOCALES
+    // ==========================================
+
+    // --- SUPABASE ---
+    const SUPABASE_URL = 'https://ybriganqcqzmipieuyxg.supabase.co'; 
+    const SUPABASE_KEY = 'sb_publishable_WBMj7poUMTJaIRVF1n8BlQ_EQsZmhja';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function cargarComentarios() {
+        const { data, error } = await _supabase.from('Comentarios').select('*').order('created_at', { ascending: false });
+        if (!error && data) {
+            const lista = document.getElementById('listaComentarios');
+            if(lista) {
+                lista.innerHTML = data.map((c) => `
+                    <div class="comment-card">
+                        <h4>${c.nombre}</h4>
+                        <p>${c.texto}</p>
+                        <div class="reactions-container">
+                            <button class="reaction-btn" onclick="reaccionar(${c.id}, 'likes', ${c.likes})">👍 <span class="reaction-count">${c.likes}</span></button>
+                            <button class="reaction-btn" onclick="reaccionar(${c.id}, 'loves', ${c.loves})">❤️ <span class="reaction-count">${c.loves}</span></button>
+                            <button class="reaction-btn" onclick="reaccionar(${c.id}, 'hahas', ${c.hahas})">😂 <span class="reaction-count">${c.hahas}</span></button>
+                            <button class="reaction-btn" onclick="reaccionar(${c.id}, 'wows', ${c.wows})">😮 <span class="reaction-count">${c.wows}</span></button>
+                            <button class="btn-delete" onclick="borrarComentario(${c.id})">🗑️ Borrar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    }
+
+    async function agregarComentario() {
+        const nombre = document.getElementById('userName').value;
+        const texto = document.getElementById('commentText').value;
+        if (nombre.trim() && texto.trim()) {
+            const { error } = await _supabase.from('Comentarios').insert([{ nombre, texto, likes: 0, loves: 0, hahas: 0, wows: 0 }]);
+            if (!error) {
+                document.getElementById('userName').value = '';
+                document.getElementById('commentText').value = '';
+                cargarComentarios(); 
+            }
+        }
+    }
+
+    async function reaccionar(id, nuevaColumna, valorActual) {
+        const llaveMemoria = `reaccion_${id}`;
+        const reaccionPrevia = localStorage.getItem(llaveMemoria);
+        if (reaccionPrevia === nuevaColumna) {
+            await _supabase.from('Comentarios').update({ [nuevaColumna]: valorActual - 1 }).eq('id', id);
+            localStorage.removeItem(llaveMemoria);
+            cargarComentarios(); return;
+        }
+        if (reaccionPrevia && reaccionPrevia !== nuevaColumna) {
+            const { data } = await _supabase.from('Comentarios').select('*').eq('id', id).single();
+            await _supabase.from('Comentarios').update({ [reaccionPrevia]: Math.max(0, data[reaccionPrevia] - 1), [nuevaColumna]: data[nuevaColumna] + 1 }).eq('id', id);
+            localStorage.setItem(llaveMemoria, nuevaColumna);
+            cargarComentarios(); return;
+        }
+        await _supabase.from('Comentarios').update({ [nuevaColumna]: valorActual + 1 }).eq('id', id);
+        localStorage.setItem(llaveMemoria, nuevaColumna);
+        cargarComentarios();
+    }
+
+    async function borrarComentario(id) {
+        const pass = prompt("Ingresa la clave de administrador para borrar:");
+        if (pass !== null && pass.trim() === "conf_borrar") { 
+            const { error } = await _supabase.from('Comentarios').delete().eq('id', id);
+            if (!error) { alert("¡Eliminado!"); cargarComentarios(); }
+        }
+    }
+    cargarComentarios();
+
+    // --- COMENTARIOS LOCALES (Si usas el otro form) ---
+    const inputNombres = document.getElementById('nombres');
+    if(inputNombres) {
+        inputNombres.addEventListener('input', function() {
+            const campoNombre = document.getElementById('comentario-nombre');
+            if (campoNombre && this.value.trim() !== "") {
+                campoNombre.value = this.value;
+                campoNombre.placeholder = ""; 
+            }
+        });
+    }
+
+    const formComentario = document.getElementById('form-comentario');
+    if (formComentario) {
+        formComentario.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            const texto = document.getElementById('comentario-texto').value.trim();
+            const nombre = localStorage.getItem('usuarioLogueado') || document.getElementById('comentario-nombre').value.trim();
+            if (texto !== "" && nombre !== "") {
+                const lista = document.getElementById('lista-comentarios');
+                const li = document.createElement('li');
+                li.style.marginBottom = "15px"; li.style.padding = "10px"; li.style.background = "rgba(255,255,255,0.05)"; li.style.borderRadius = "10px";
+                li.innerHTML = `<strong style="color: #00d2ff;">${nombre}:</strong> ${texto}`;
+                lista.insertBefore(li, lista.firstChild);
+                document.getElementById('comentario-texto').value = '';
+            }
+        });
+    }
+
+    // --- CARRUSELES ---
+    function activarCarrusel(idTrack) {
+        const track = document.getElementById(idTrack);
+        if (!track) return;
+        let index = 0;
+        const items = track.querySelectorAll('.carrusel-item');
+        const totalItems = items.length;
+        if (totalItems === 0) return;
+        setInterval(() => {
+            index++;
+            if (index >= totalItems) index = 0;
+            const porcentajeMover = index * -(100 / totalItems); 
+            track.style.transform = `translateX(${porcentajeMover}%)`;
+        }, 4000); 
+    }
+    activarCarrusel('track1'); 
+    activarCarrusel('track2'); 
+
+window.onload = function(){
+
+    let usuario = localStorage.getItem("usuarioActual");
+
+
+    if(usuario){
+
+        usuario = JSON.parse(usuario);
+
+
+        // Mostrar usuario
+        document.getElementById("userButton")
+        .style.display="block";
+
+
+        document.getElementById("loginButton")
+        .style.display="none";
+
+
+        document.getElementById("nombreUsuario")
+        .innerText = usuario.nombre;
+
+
+
+        // Si NO es administrador ocultar panel admin
+
+        if(usuario.tipo_usuario !== "admin"){
+
+            document.getElementById("adminOption")
+            .style.display="none";
+
+        }
+
+
+    }else{
+
+
+        // No hay usuario conectado
+
+        document.getElementById("userButton")
+        .style.display="none";
+
+
+        document.getElementById("loginButton")
+        .style.display="block";
+
+
+    }
+
+};
+function toggleMenu(){
+
+    document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+
+}
+
+
+function cerrarSesion(){
+
+    localStorage.removeItem("usuarioActual");
+
+    window.location.reload();
+
+}
+
+
+function irLogin(){
+
+    window.location.href="/login";
+
+}
+</script>
+</body>
+</html>

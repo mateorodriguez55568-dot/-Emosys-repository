@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - EMOSYS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-body: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --estres: #ff416c;
+            --text: #ffffff;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container { 
+            padding: 40px 5%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%;
+        }
+
+        .registro-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h2 { 
+            font-family: var(--font-heading); 
+            color: var(--primary); 
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .input-group { 
+            margin-bottom: 20px; 
+            text-align: left; 
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-size: 0.9rem; 
+            color: var(--primary); 
+            font-weight: 600; 
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        select option {
+            background: #302b63;
+            color: white;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+        }
+
+        .btn-glow {
+            width: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--estres));
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-glow:hover {
+            transform: scale(1.02) translateY(-3px);
+            box-shadow: 0 0 30px var(--estres);
+        }
+
+        .btn-glow:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-back:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+        }
+
+        .error-msg {
+            color: var(--estres);
+            font-size: 0.85rem;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .link-registro {
+            display: inline-block;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .link-registro:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+        }
+
+        .link-registro span {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 60px rgba(0, 210, 255, 0.1), 0 0 40px rgba(0,0,0,0.4);
+            text-align: center;
+            transform: scale(0.8) translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .modal-card .subtitle {
+            margin-bottom: 20px;
+        }
+
+        .modal-card .input-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-card .input-group label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        .modal-card input,
+        .modal-card select {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-cancelar {
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 14px;
+            border-radius: 50px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+
+        .btn-cancelar:hover {
+            border-color: var(--estres);
+            color: var(--estres);
+        }
+
+        .modal-card::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-card::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-card::-webkit-scrollbar-thumb {
+            background: rgba(0, 210, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .notificacion-db {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            transition: opacity 0.4s;
+        }
+
+        .notificacion-db.exito {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .notificacion-db.error {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+        }
+
+        .campo-error input,
+        .campo-error select {
+            border-color: var(--estres) !important;
+            box-shadow: 0 0 8px rgba(255, 65, 108, 0.3) !important;
+        }
+
+        .campo-error-text {
+            color: var(--estres);
+            font-size: 0.75rem;
+            margin-top: 4px;
+            display: none;
+            text-align: left;
+        }
+
+        .campo-error .campo-error-text {
+            display: block;
+        }
+
+        @media (max-width: 500px) {
+            .registro-card {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+
+            .modal-card {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="container">
+        <div class="registro-card">
+            <h2>Bienvenido de vuelta</h2>
+            <p class="subtitle">Ingresa tus credenciales para acceder a EMOSYS</p>
+            
+            <form id="form-login">
+                <div class="input-group">
+                    <label for="login-usuario">Usuario o Correo</label>
+                    <input type="text" id="login-usuario" name="usuario" placeholder="Ej. Andy Sosa" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" name="password" placeholder="Tu contraseña" required>
+                </div>
+
+                <p id="msg-error" class="error-msg"></p>
+
+                <button type="submit" class="btn-glow" id="btn-login">Iniciar Sesión</button>
+            </form>
+
+            <p class="link-registro" id="abrir-modal-registro">¿No tienes cuenta? <span>Regístrate aquí</span></p>
+            <br>
+            <a href="/" class="btn-back" style="margin-top: -10px;">⬅️ Volver al inicio</a>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="modal-registro">
+        <div class="modal-card">
+            <h2>Crear Cuenta</h2>
+            <p class="subtitle">Completa tus datos para registrarte en EMOSYS</p>
+
+            <form id="form-registro-modal">
+                <div class="input-group" id="grp-cedula">
+                    <label for="reg-cedula">Cédula</label>
+                    <input type="text" id="reg-cedula" placeholder="Ej. 1234567890">
+                    <p class="campo-error-text" id="err-cedula"></p>
+                </div>
+
+                <div class="input-group" id="grp-nombres">
+                    <label for="reg-nombres">Nombres y Apellidos</label>
+                    <input type="text" id="reg-nombres" placeholder="Ej. Andy Sosa">
+                    <p class="campo-error-text" id="err-nombres"></p>
+                </div>
+
+                <div class="input-group" id="grp-edad">
+                    <label for="reg-edad">Edad</label>
+                    <input type="number" id="reg-edad" placeholder="Ej. 22" min="1" max="120">
+                    <p class="campo-error-text" id="err-edad"></p>
+                </div>
+
+                <div class="input-group" id="grp-email">
+                    <label for="reg-email">Correo Electrónico</label>
+                    <input type="email" id="reg-email" placeholder="Ej. andy@correo.com">
+                    <p class="campo-error-text" id="err-email"></p>
+                </div>
+
+                <div class="input-group" id="grp-tipo">
+                    <label for="reg-tipo">Tipo de Usuario</label>
+                    <select id="reg-tipo">
+                        <option value="">Selecciona una opción</option>
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Profesional">Profesional</option>
+                        <option value="Docente">Docente</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <p class="campo-error-text" id="err-tipo"></p>
+                </div>
+
+                <div class="input-group" id="grp-password">
+                    <label for="reg-password">Contraseña</label>
+                    <input type="password" id="reg-password" placeholder="Mínimo 8 caracteres">
+                    <p class="campo-error-text" id="err-password"></p>
+                </div>
+
+                <div class="input-group" id="grp-confirmar">
+                    <label for="reg-confirmar">Confirmar Contraseña</label>
+                    <input type="password" id="reg-confirmar" placeholder="Repite tu contraseña">
+                    <p class="campo-error-text" id="err-confirmar"></p>
+                </div>
+
+                <p id="msg-error-registro" class="error-msg"></p>
+
+                <button type="submit" class="btn-glow" id="btn-registro">Registrarme</button>
+                <button type="button" class="btn-cancelar" id="btn-cerrar-modal">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function notificar(mensaje, tipo) {
+        var existente = document.querySelector(".notificacion-db");
+        if (existente) existente.remove();
+        var div = document.createElement("div");
+        div.className = "notificacion-db " + tipo;
+        div.textContent = mensaje;
+        document.body.appendChild(div);
+        setTimeout(function() {
+            div.style.opacity = "0";
+            div.style.transition = "0.4s";
+            setTimeout(function() { div.remove(); }, 400);
+        }, 3500);
+    }
+
+    var modal = document.getElementById("modal-registro");
+    var btnAbrir = document.getElementById("abrir-modal-registro");
+    var btnCerrar = document.getElementById("btn-cerrar-modal");
+
+    btnAbrir.addEventListener("click", function() {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+    });
+
+    function cerrarModal() {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+        limpiarErrores();
+        document.getElementById("form-registro-modal").reset();
+    }
+
+    btnCerrar.addEventListener("click", cerrarModal);
+
+    modal.addEventListener("click", function(e) {
+        if (e.target === modal) {
+            cerrarModal();
+        }
+    });
+
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+            cerrarModal();
+        }
+    });
+
+    function limpiarErrores() {
+        var grupos = document.querySelectorAll(".campo-error");
+        for (var i = 0; i < grupos.length; i++) {
+            grupos[i].classList.remove("campo-error");
+        }
+        var textos = document.querySelectorAll(".campo-error-text");
+        for (var j = 0; j < textos.length; j++) {
+            textos[j].textContent = "";
+            textos[j].style.display = "none";
+        }
+        var msgErr = document.getElementById("msg-error");
+        msgErr.style.display = "none";
+        msgErr.textContent = "";
+        var msgErrReg = document.getElementById("msg-error-registro");
+        msgErrReg.style.display = "none";
+        msgErrReg.textContent = "";
+    }
+
+    function marcarError(grupoId, errorId, mensaje) {
+        document.getElementById(grupoId).classList.add("campo-error");
+        var errEl = document.getElementById(errorId);
+        errEl.textContent = mensaje;
+        errEl.style.display = "block";
+    }
+
+    function emailValido(email) {
+        var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+document.getElementById("form-login").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    var usuario = document.getElementById("login-usuario").value.trim();
+    var password = document.getElementById("login-password").value.trim();
+
+    var msgError = document.getElementById("msg-error");
+    var btnLogin = document.getElementById("btn-login");
+
+
+    if (!usuario || !password) {
+
+        msgError.textContent = "⚠️ Debes completar todos los campos.";
+        msgError.style.display = "block";
+        return;
+
+    }
+
+
+    btnLogin.disabled = true;
+    btnLogin.textContent = "Ingresando...";
+
+
+    fetch("/api/login", {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            usuario:usuario,
+            password:password
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(datos => {
+
+
+        btnLogin.disabled=false;
+        btnLogin.textContent="Iniciar Sesión";
+
+
+        if(datos.exito){
+
+
+            localStorage.setItem(
+                "usuarioActual",
+                JSON.stringify(datos.usuario)
+            );
+
+
+            localStorage.setItem(
+                "idSesion",
+                datos.idSesion
+            );
+
+
+            localStorage.setItem(
+                "sistemaActivo",
+                "true"
+            );
+
+if(datos.usuario.tipo_usuario.toLowerCase()=="admin"){
+
+    window.location.href="/admin";
+
+}else{
+
+    window.location.href="/Monitor";
+
+}
+
+
+        }else{
+
+
+            msgError.textContent="⚠️ "+datos.error;
+            msgError.style.display="block";
+
+
+        }
+
+
+    })
+
+
+    .catch(error=>{
+
+
+        btnLogin.disabled=false;
+        btnLogin.textContent="Iniciar Sesión";
+
+        msgError.textContent=
+        "⚠️ Error de conexión con el servidor.";
+
+        msgError.style.display="block";
+
+
+    });
+
+
+});
+
+    document.getElementById("form-registro-modal").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        limpiarErrores();
+
+        var cedula = document.getElementById("reg-cedula").value.trim();
+        var nombres = document.getElementById("reg-nombres").value.trim();
+        var edad = document.getElementById("reg-edad").value.trim();
+        var email = document.getElementById("reg-email").value.trim();
+        var tipoUsuario = document.getElementById("reg-tipo").value;
+        var password = document.getElementById("reg-password").value;
+        var confirmar = document.getElementById("reg-confirmar").value;
+
+        var hayError = false;
+
+        if (!cedula) {
+            marcarError("grp-cedula", "err-cedula", "La cédula es obligatoria.");
+            hayError = true;
+        }
+
+        if (!nombres) {
+            marcarError("grp-nombres", "err-nombres", "El nombre es obligatorio.");
+            hayError = true;
+        }
+
+        if (!edad || parseInt(edad) < 1 || parseInt(edad) > 120 || isNaN(parseInt(edad))) {
+            marcarError("grp-edad", "err-edad", "Ingresa una edad válida (1-120).");
+            hayError = true;
+        }
+
+        if (!email || !emailValido(email)) {
+            marcarError("grp-email", "err-email", "Ingresa un correo electrónico válido.");
+            hayError = true;
+        }
+
+        if (!tipoUsuario) {
+            marcarError("grp-tipo", "err-tipo", "Selecciona un tipo de usuario.");
+            hayError = true;
+        }
+
+        if (!password || password.length < 8) {
+            marcarError("grp-password", "err-password", "La contraseña debe tener al menos 8 caracteres.");
+            hayError = true;
+        }
+
+        if (!confirmar || confirmar !== password) {
+            marcarError("grp-confirmar", "err-confirmar", "Las contraseñas no coinciden.");
+            hayError = true;
+        }
+
+        if (hayError) return;
+
+        var btnRegistro = document.getElementById("btn-registro");
+        btnRegistro.disabled = true;
+        btnRegistro.textContent = "Registrando...";
+
+        fetch("/api/registrar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                cedula: cedula,
+                nombres: nombres,
+                edad: parseInt(edad),
+                email: email,
+                tipo_usuario: tipoUsuario,
+                password: password
+            })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(datos) {
+            btnRegistro.disabled = false;
+            btnRegistro.textContent = "Registrarme";
+
+            if (datos.exito) {
+                notificar("✅ " + datos.mensaje, "exito");
+                modal.classList.remove("active");
+                document.body.style.overflow = "";
+                document.getElementById("form-registro-modal").reset();
+                document.getElementById("login-usuario").value = datos.usuario.email;
+                document.getElementById("login-password").focus();
+            } else {
+                var msgErr = document.getElementById("msg-error-registro");
+
+                if (datos.campo) {
+                    if (datos.campo === "cedula") {
+                        marcarError("grp-cedula", "err-cedula", datos.error);
+                    } else if (datos.campo === "email") {
+                        marcarError("grp-email", "err-email", datos.error);
+                    } else if (datos.campo === "password") {
+                        marcarError("grp-password", "err-password", datos.error);
+                    } else {
+                        msgErr.textContent = "⚠️ " + datos.error;
+                        msgErr.style.display = "block";
+                    }
+                } else {
+                    msgErr.textContent = "⚠️ " + (datos.error || "Error al registrar.");
+                    msgErr.style.display = "block";
+                }
+            }
+        })
+        .catch(function(err) {
+            btnRegistro.disabled = false;
+            btnRegistro.textContent = "Registrarme";
+            var msgErr = document.getElementById("msg-error-registro");
+            msgErr.textContent = "⚠️ Error de conexión con el servidor.";
+            msgErr.style.display = "block";
+        });
+    });
+    </script>
+
+</body>
+</html>
