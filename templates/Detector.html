@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMOSYS | Proyecto Integrador</title>
     
-    <link rel="icon" href="LOGO_emotic-Photoroom.png" type="image/png">
+    <link rel="icon" href="{{ url_for('static', filename='LOGO_emotic-Photoroom.png') }}" type="image/png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <style>
     :root {
         --bg-body: #0f0c29;
@@ -19,13 +19,14 @@
         --primary: #00d2ff;
         --secondary: #3a7bd5;
         --estres: #ff416c;
-        --alegria: #00ffb3; /* Variable agregada para evitar errores en subtítulos */
+        --alegria: #00ffb3; 
         --text: #ffffff;
         --font-heading: 'Space Grotesk', sans-serif;
         --font-body: 'Poppins', sans-serif;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Prevención global de desbordamientos horizontales */
+    * { margin: 0; padding: 0; box-sizing: border-box; max-width: 100%; }
 
     body {
         font-family: var(--font-body);
@@ -50,10 +51,11 @@
         position: sticky;
         top: 0;
         z-index: 1000;
+        width: 100%;
     }
 
     .logo-img {
-        height: 115px;
+        height: 90px;
         width: auto;
         display: block;
         transition: .35s;
@@ -84,10 +86,6 @@
         scroll-margin-top: 120px; 
     }
 
-    html {
-        scroll-behavior: smooth;
-    }
-
     /* --- HERO / POSTER --- */
     .hero-section {
         position: relative;
@@ -111,7 +109,7 @@
         z-index: -1;
     }
 
-    .hero { text-align: center; padding: 60px 10%; }
+    .hero { text-align: center; padding: 60px 10%; width: 100%; }
     .hero h1 {
         font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800;
         background: linear-gradient(to right, #00d2ff, #3a7bd5);
@@ -147,7 +145,7 @@
     .card-funcionamiento { border-left: 5px solid #3a7bd5; }
     .card-estados { border-left: 5px solid #00ffb3; }
     .card-rangos { border-left: 5px solid #ffb347; }
-    .card-webcam { border-left: 5px solid #ff416c; grid-column: 1 / span 2; } /* Ocupa todo el ancho */
+    .card-webcam { border-left: 5px solid #ff416c; grid-column: 1 / span 2; } 
 
     .sensor-list { margin: 15px 0; padding-left: 20px; }
     .sensor-list li { margin-bottom: 10px; }
@@ -163,6 +161,7 @@
     }
     .emociones-grid span { font-size: 3rem; }
 
+    .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .tabla-emociones { width: 100%; border-collapse: collapse; margin-top: 15px; }
     .tabla-emociones th { background: #1b4d80; color: white; padding: 12px; }
     .tabla-emociones td { padding: 12px; border: 1px solid rgba(255,255,255,.15); text-align: center; }
@@ -174,18 +173,12 @@
         text-align: center;
     }
 
-    @media (max-width: 768px) {
-        .conclusion-card, .info-grid {
-            grid-template-columns: 1fr;
-        }
-        .conclusion-card { grid-column: 1; }
-    }
-
     .galeria-header {
         background: linear-gradient(to right, var(--primary), var(--secondary));
         -webkit-background-clip: text; background-clip: text;
         -webkit-text-fill-color: transparent; color: transparent;
         margin-bottom: 10px; font-size: 3rem;
+        text-align: center;
     }
 
     /* --- Carrusel --- */
@@ -195,6 +188,7 @@
         overflow: hidden; 
         border-radius: 25px; 
         border: 1px solid var(--glass-border); 
+        width: 100%;
     }
 
     .carrusel-track { 
@@ -214,7 +208,7 @@
         justify-content: center; 
     }
 
-    #track1 .carrusel-item img, #track2 .carrusel-item img { 
+    .carrusel-item img { 
         width: 100%; 
         height: 100%; 
         object-fit: cover; 
@@ -229,38 +223,6 @@
         padding: 30px; 
     }
 
-    /* --- Webcam Estilos --- */
-    .webcam-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
-    }
-    .webcam-video {
-        width: 100%;
-        max-width: 640px;
-        height: auto;
-        border-radius: 15px;
-        border: 2px solid var(--primary);
-        background: #000;
-    }
-    .btn-webcam {
-        margin-top: 15px;
-        padding: 12px 25px;
-        background: var(--primary);
-        border: none;
-        border-radius: 25px;
-        color: #0f0c29;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .btn-webcam:hover {
-        background: var(--secondary);
-        color: white;
-        transform: scale(1.05);
-    }
-
     /* --- Videos --- */
     .video-grid {
         display: flex;
@@ -272,7 +234,8 @@
     }
 
     .video-container {
-        width: 700px;
+        width: 100%;
+        max-width: 700px;
         aspect-ratio: 16/9;
     }
     .video-container video {
@@ -281,20 +244,6 @@
         object-fit: cover;
         display: block;
         border-radius: 15px;
-    }
-
-    /* --- Fondos decorativos --- */
-    .background-emojis {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        z-index: -1; overflow: hidden; pointer-events: none;
-    }
-    .floating-emoji {
-        position: absolute; font-size: 2rem; opacity: 0.1;
-        animation: floatAnimation 15s linear infinite;
-    }
-    @keyframes floatAnimation {
-        0% { transform: translateY(110vh) rotate(0deg); }
-        100% { transform: translateY(-10vh) rotate(360deg); }
     }
 
     footer { padding: 40px; text-align: center; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); font-size: 0.9rem; }
@@ -310,72 +259,70 @@
     .dropdown a { display: block; color: white; padding: 15px; text-decoration: none; }
     .dropdown a:hover { background: #3a7bd5; }
     .show { display: block; }
+
     /* ==========================================================
-   ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
-   ========================================================== */
+       ESTILOS RESPONSIVOS PARA CELULARES Y TABLETS
+       ========================================================== */
+    @media screen and (max-width: 768px) {
+        header {
+            padding: 0 15px;
+            height: auto;
+            min-height: 80px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
 
-/* Asegurar que las tablas no rompan el diseño en pantallas pequeñas */
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
+        .logo-img {
+            height: 60px;
+        }
 
-/* Ajustes automáticos para pantallas menores a 768px (Celulares) */
-@media screen and (max-width: 768px) {
-    body {
-        padding: 15px 3%; /* Menos espacio en los bordes para aprovechar la pantalla */
+        .nav-pulse {
+            display: none; /* Ocultar la línea animada en móviles para ahorrar espacio */
+        }
+
+        nav ul {
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            font-size: 0.7rem;
+        }
+
+        section {
+            padding: 25px 5%;
+        }
+
+        .info-grid, .conclusion-card {
+            grid-template-columns: 1fr;
+        }
+
+        .card-webcam {
+            grid-column: 1;
+        }
+
+        .emociones-grid span {
+            font-size: 2rem;
+        }
+
+        .carrusel-item {
+            height: 280px; /* Reducir altura del carrusel en celulares */
+        }
+
+        h1 {
+            font-size: 2rem !important;
+        }
+
+        .galeria-header {
+            font-size: 2rem;
+        }
     }
+    </style>
 
-    /* Reducir tamaño de títulos grandes */
-    h1 {
-        font-size: 1.5rem !important;
-    }
-
-    /* Convertir la barra de navegación o headers en columna si se amontonan */
-    .navbar, .admin-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-        padding: 15px;
-    }
-
-    .nav-links {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .header-actions, .tools-bar {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .search-box {
-        min-width: 100%;
-    }
-
-    /* Reducir padding de las tarjetas principales en móviles */
-    .admin-card {
-        padding: 15px;
-        border-radius: 15px;
-    }
-
-    /* Los formularios en cuadrícula (grid) pasan a una sola columna vertical */
-    .form-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* Ajustar modales para que ocupen casi toda la pantalla del celular sin desbordarse */
-    .modal-content {
-        width: 95% !important;
-        padding: 20px;
-        margin: 10px;
-    }
-}
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 

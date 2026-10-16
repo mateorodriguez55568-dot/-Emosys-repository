@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor .AI | Monitor en Vivo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', filename='ChatGPT Image 10 jul 2026, 09_10_26 a.m..png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,13 +24,15 @@
             --font-body: 'Poppins', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Corrección global para evitar desbordamientos horizontales */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-width: 100%; }
 
         body {
             font-family: var(--font-body);
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         header {
@@ -46,10 +47,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            width: 100%;
         }
 
         .logo-img {
-            height: 82px;
+            height: 70px;
             width: auto;
             display: block;
             transition: .35s;
@@ -60,17 +62,17 @@
             transform: scale(1.05);
         }
 
-        nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a { color: white; text-decoration: none; font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; }
+        nav ul { display: flex; list-style: none; gap: 20px; align-items: center; }
+        nav a { color: white; text-decoration: none; font-family: var(--font-heading); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
 
-        .container { padding: 40px 5%; display: flex; flex-direction: column; align-items: center; }
+        .container { padding: 30px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
 
         .monitor-display { 
             background: var(--glass); 
             border: 1px solid var(--glass-border); 
             backdrop-filter: blur(15px); 
-            padding: 40px; 
-            border-radius: 40px; 
+            padding: 30px 20px; 
+            border-radius: 30px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -80,7 +82,7 @@
 
         .layout-sensores {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             width: 100%;
             justify-content: center;
             align-items: center;
@@ -89,8 +91,8 @@
         }
 
         .main-circle {
-            width: 240px;
-            height: 240px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             border: 3px solid var(--primary);
             box-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
@@ -99,20 +101,20 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             transition: all 0.5s ease;
         }
 
         .main-circle h3 {
-            font-size: 16px;
-            max-width: 180px;
-            margin-top: 10px;
+            font-size: 15px;
+            max-width: 160px;
+            margin-top: 8px;
         }
 
         /* --- Módulo de Video de Cámara --- */
         .camera-box {
-            width: 240px;
-            height: 240px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             border: 3px solid var(--secondary);
             background: rgba(0,0,0,0.4);
@@ -144,14 +146,14 @@
             z-index: 10;
         }
 
-        .emoji-live { font-size: 70px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
-        .stat-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center; }
-        .stat-box p { font-size: 0.8rem; font-weight: 700; color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; }
-        .stat-val { font-size: 2.5rem; font-family: var(--font-heading); font-weight: 700; }
+        .emoji-live { font-size: 60px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+        .stat-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border); text-align: center; }
+        .stat-box p { font-size: 0.75rem; font-weight: 700; color: var(--primary); letter-spacing: 1px; margin-bottom: 8px; }
+        .stat-val { font-size: 2rem; font-family: var(--font-heading); font-weight: 700; }
 
         #btnConectar {
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 12px 28px;
             border-radius: 40px;
             border: none;
@@ -170,7 +172,7 @@
         }
 
         #btnFinalizar {
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 12px 28px;
             border-radius: 40px;
             border: none;
@@ -191,9 +193,9 @@
 
         .botones-monitor {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
 
@@ -216,69 +218,57 @@
         .dropdown a { display: block; color: white; padding: 15px; text-decoration: none; }
         .dropdown a:hover { background: #3a7bd5; }
         .show { display: block; }
+
         /* ==========================================================
-   ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
-   ========================================================== */
+           ESTILOS RESPONSIVOS OPTIMIZADOS PARA CELULARES Y TABLETS
+           ========================================================== */
+        @media screen and (max-width: 768px) {
+            header {
+                padding: 0 15px;
+                height: auto;
+                min-height: 80px;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                padding-bottom: 10px;
+            }
 
-/* Asegurar que las tablas no rompan el diseño en pantallas pequeñas */
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
+            .logo-img {
+                height: 50px;
+            }
 
-/* Ajustes automáticos para pantallas menores a 768px (Celulares) */
-@media screen and (max-width: 768px) {
-    body {
-        padding: 15px 3%; /* Menos espacio en los bordes para aprovechar la pantalla */
-    }
+            nav ul {
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
 
-    /* Reducir tamaño de títulos grandes */
-    h1 {
-        font-size: 1.5rem !important;
-    }
+            nav a {
+                font-size: 0.75rem;
+            }
 
-    /* Convertir la barra de navegación o headers en columna si se amontonan */
-    .navbar, .admin-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-        padding: 15px;
-    }
+            .container {
+                padding: 15px 10px;
+            }
 
-    .nav-links {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
+            .monitor-display {
+                padding: 20px 10px;
+                border-radius: 20px;
+            }
 
-    .header-actions, .tools-bar {
-        flex-direction: column;
-        width: 100%;
-    }
+            .main-circle, .camera-box {
+                width: 190px;
+                height: 190px;
+            }
 
-    .search-box {
-        min-width: 100%;
-    }
+            .stats-grid {
+                grid-template-columns: 1fr; /* Una columna para que no se aprieten los números en pantallas muy estrechas */
+            }
 
-    /* Reducir padding de las tarjetas principales en móviles */
-    .admin-card {
-        padding: 15px;
-        border-radius: 15px;
-    }
-
-    /* Los formularios en cuadrícula (grid) pasan a una sola columna vertical */
-    .form-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* Ajustar modales para que ocupen casi toda la pantalla del celular sin desbordarse */
-    .modal-content {
-        width: 95% !important;
-        padding: 20px;
-        margin: 10px;
-    }
-}
+            .stat-val {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>

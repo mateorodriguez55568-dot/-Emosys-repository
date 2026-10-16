@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - EMOSYS</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <style>
         :root {
             --bg-body: #0f0c29;
@@ -20,7 +20,8 @@
             --font-body: 'Poppins', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Prevención global de desbordamientos horizontales */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-width: 100%; }
 
         body {
             font-family: var(--font-body);
@@ -28,6 +29,7 @@
             color: var(--text);
             min-height: 100vh;
             padding: 40px 5%;
+            overflow-x: hidden;
         }
 
         .admin-header {
@@ -55,6 +57,7 @@
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 0 40px rgba(0,0,0,0.3);
+            width: 100%;
         }
 
         .tools-bar {
@@ -98,7 +101,11 @@
             font-size: 1rem;
         }
 
-        .table-wrapper { overflow-x: auto; }
+        .table-wrapper { 
+            width: 100%;
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch;
+        }
 
         table { width: 100%; border-collapse: collapse; text-align: left; }
 
@@ -142,26 +149,21 @@
         .btn-delete { background: rgba(255, 65, 108, 0.2); color: var(--estres); }
         .btn-delete:hover { background: var(--estres); color: #fff; }
 
-.btn-glow {
-    background: linear-gradient(45deg, var(--primary), var(--estres)); 
-    border: none;
-    padding: 12px 25px;
-    border-radius: 50px;
-    color: white; 
-    font-weight: 700;
-    font-family: var(--font-heading);
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: 0.4s;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    text-decoration: none;
-    font-size: 0.85rem;
-}
-
-.btn-glow:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px var(--primary); /* <--- BRILLO CYAN AL HACER HOVER */
-}
+        .btn-glow {
+            background: linear-gradient(45deg, var(--primary), var(--estres)); 
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: white; 
+            font-weight: 700;
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
 
         .btn-glow:hover {
             transform: translateY(-2px);
@@ -282,320 +284,144 @@
         .form-grid .full-width {
             grid-column: 1 / -1;
         }
-        .user-menu{
-    position:relative;
-    display:inline-block;
-}
 
-
-.user-button{
-
-    background:none;
-    border:none;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    padding:10px;
-
-}
-
-
-.dropdown{
-
-    display:none;
-    position:absolute;
-    right:0;
-    top:45px;
-
-    background:#15122b;
-
-    width:220px;
-
-    border-radius:12px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.5);
-
-    overflow:hidden;
-
-    z-index:1000;
-
-}
-
-
-.dropdown a{
-
-    display:block;
-
-    color:white;
-
-    padding:15px;
-
-    text-decoration:none;
-
-}
-
-
-.dropdown a:hover{
-
-    background:#3a7bd5;
-
-}
-
-
-.show{
-
-    display:block;
-
-}
-/* ==============================
-   NAVBAR ADMIN
-============================== */
-
-
-.navbar{
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:18px 30px;
-
-    margin-bottom:30px;
-
-
-    background:rgba(255,255,255,0.05);
-
-    border:1px solid rgba(255,255,255,0.15);
-
-    border-radius:20px;
-
-
-    backdrop-filter:blur(15px);
-
-}
-
-
-
-.nav-logo{
-
-    font-family:var(--font-heading);
-
-    font-size:1.5rem;
-
-    color:var(--primary);
-
-    font-weight:700;
-
-}
-
-
-
-.nav-links{
-
-    display:flex;
-
-    gap:25px;
-
-}
-
-
-
-.nav-links a{
-
-    color:white;
-
-    text-decoration:none;
-
-    font-weight:600;
-
-    font-size:.9rem;
-
-    transition:.3s;
-
-    padding:8px 12px;
-
-    border-radius:10px;
-
-}
-
-
-
-.nav-links a:hover{
-
-    background:rgba(0,210,255,.2);
-
-    color:var(--primary);
-
-}
-
-
-
-/* USUARIO */
-
-
-.user-menu{
-
-    position:relative;
-
-}
-
-
-
-.user-button{
-
-    background:
-
-    linear-gradient(
-    45deg,
-    var(--primary),
-    var(--secondary)
-    );
-
-
-    border:none;
-
-    color:white;
-
-    padding:12px 20px;
-
-    border-radius:30px;
-
-    cursor:pointer;
-
-    font-weight:700;
-
-}
-
-
-
-.dropdown{
-
-    display:none;
-
-    position:absolute;
-
-    right:0;
-
-    top:55px;
-
-
-    width:220px;
-
-
-    background:#15122b;
-
-
-    border-radius:15px;
-
-
-    overflow:hidden;
-
-
-    box-shadow:
-    0 10px 40px rgba(0,0,0,.5);
-
-
-    z-index:1000;
-
-}
-
-
-
-.dropdown a{
-
-    display:block;
-
-    padding:15px;
-
-    color:white;
-
-    text-decoration:none;
-
-}
-
-
-
-.dropdown a:hover{
-
-    background:#3a7bd5;
-
-}
-
-
-
-.show{
-
-    display:block;
-
-}
-/* ==========================================================
-   ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
-   ========================================================== */
-
-/* Asegurar que las tablas no rompan el diseño en pantallas pequeñas */
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Ajustes automáticos para pantallas menores a 768px (Celulares) */
-@media screen and (max-width: 768px) {
-    body {
-        padding: 15px 3%; /* Menos espacio en los bordes para aprovechar la pantalla */
-    }
-
-    /* Reducir tamaño de títulos grandes */
-    h1 {
-        font-size: 1.5rem !important;
-    }
-
-    /* Convertir la barra de navegación o headers en columna si se amontonan */
-    .navbar, .admin-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-        padding: 15px;
-    }
-
-    .nav-links {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .header-actions, .tools-bar {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .search-box {
-        min-width: 100%;
-    }
-
-    /* Reducir padding de las tarjetas principales en móviles */
-    .admin-card {
-        padding: 15px;
-        border-radius: 15px;
-    }
-
-    /* Los formularios en cuadrícula (grid) pasan a una sola columna vertical */
-    .form-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* Ajustar modales para que ocupen casi toda la pantalla del celular sin desbordarse */
-    .modal-content {
-        width: 95% !important;
-        padding: 20px;
-        margin: 10px;
-    }
-}
-</style>
+        /* ==============================
+           NAVBAR ADMIN
+        ============================== */
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .9rem;
+            transition: .3s;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0,210,255,.2);
+            color: var(--primary);
+        }
+
+        /* USUARIO */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 55px;
+            width: 220px;
+            background: #15122b;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,.5);
+            z-index: 1000;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .dropdown a:hover {
+            background: #3a7bd5;
+        }
+
+        .show {
+            display: block;
+        }
+
+        /* ==========================================================
+           ESTILOS RESPONSIVOS UNIVERSALES PARA CELULARES Y TABLETS
+           ========================================================== */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 15px 3%; 
+            }
+
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .navbar, .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .nav-links {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .header-actions, .tools-bar {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .admin-card {
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .modal-content {
+                width: 95% !important;
+                padding: 20px;
+                margin: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
